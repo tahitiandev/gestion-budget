@@ -3,6 +3,7 @@ import { AuthService } from './services/auth.service';
 import { BudgetService } from './services/budget.service';
 import { CoursesService } from './services/courses.service';
 import { CategoriesService } from './services/categories.service';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ import { CategoriesService } from './services/categories.service';
 export class AppComponent implements OnInit {
   userEmail: string | null = null;
 
-  constructor(private authService: AuthService, private budgetService: BudgetService, private coursesService: CoursesService, private categoriesService: CategoriesService) {}
+  constructor(private authService: AuthService, private budgetService: BudgetService, private coursesService: CoursesService, private categoriesService: CategoriesService, private themeService: ThemeService) {}
 
   ngOnInit() {
     this.authService.authState$.subscribe(user => {

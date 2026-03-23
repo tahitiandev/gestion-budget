@@ -8,6 +8,20 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <!-- Apparence -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Apparence</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-icon [name]="darkMode ? 'moon' : 'sunny-outline'" slot="start"></ion-icon>
+        <ion-label>Mode sombre</ion-label>
+        <ion-toggle [(ngModel)]="darkMode" (ionChange)="toggleDarkMode()"></ion-toggle>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
   <!-- Catégories de dépenses -->
   <ion-card>
     <ion-card-header>

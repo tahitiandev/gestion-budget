@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { CategoriesService, UserCategories } from '../../services/categories.service';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-parametres',
@@ -12,14 +13,21 @@ export class ParametresPage {
   categories: UserCategories = { depense: [], apport: [] };
   newDepense = '';
   newApport = '';
+  darkMode = false;
 
   constructor(
     private categoriesService: CategoriesService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private themeService: ThemeService
   ) {}
 
   async ionViewWillEnter() {
     this.categories = await this.categoriesService.getCategories();
+    this.darkMode = await this.themeService.isDarkMode();
+  }
+
+  async toggleDarkMode() {
+    await this.themeService.setDarkMode(this.darkMode);
   }
 
   async addDepenseCategory() {
