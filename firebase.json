@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "site": "gestion-du-budget-858d5",
+    "public": "www",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

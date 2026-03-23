@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Ajouter une transaction</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label>Type</ion-label>
+    <ion-select [(ngModel)]="transaction.type">
+      <ion-select-option value="apport">Apport</ion-select-option>
+      <ion-select-option value="depense">Dépense</ion-select-option>
+      <ion-select-option value="virement">Virement épargne</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Catégorie</ion-label>
+    <ion-select [(ngModel)]="transaction.categorie">
+      <ion-select-option *ngFor="let cat of categories[transaction.type!]" [value]="cat">
+        {{ cat }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Montant</ion-label>
+    <ion-input type="number" [(ngModel)]="transaction.montant"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Commentaire (facultatif)</ion-label>
+    <ion-input [(ngModel)]="transaction.commentaire"></ion-input>
+  </ion-item>
+
+  <ion-button expand="full" class="ion-margin-top" (click)="save()">
+    Enregistrer
+  </ion-button>
+</ion-content>

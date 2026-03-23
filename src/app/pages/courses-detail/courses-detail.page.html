@@ -1,0 +1,108 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/courses"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ list?.validated ? 'Modifier la liste' : 'Nouvelle liste' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" *ngIf="list">
+  <!-- Statut -->
+  <ion-chip [color]="list.validated ? (list.selfPaid ? 'success' : 'tertiary') : 'warning'">
+    <ion-icon [name]="list.validated ? 'checkmark-circle' : 'time-outline'"></ion-icon>
+    <ion-label>{{ list.validated ? (list.selfPaid ? 'Validée — dans les dépenses' : 'Validée — non payée par moi') : 'En cours' }}</ion-label>
+  </ion-chip>
+
+  <!-- Formulaire d'ajout d'article -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Ajouter un article</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Intitulé</ion-label>
+        <ion-input [(ngModel)]="intitule" (keyup.enter)="addArticle()"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Prix (€)</ion-label>
+        <ion-input type="number" [(ngModel)]="prix" (keyup.enter)="addArticle()"></ion-input>
+      </ion-item>
+
+      <ion-button expand="full" class="ion-margin-top" (click)="addArticle()" [disabled]="!intitule.trim() || !prix || prix <= 0">
+        Ajouter
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Liste des articles -->
+  <ion-list *ngIf="list.articles.length > 0">
+    <ion-list-header>
+      <ion-label>Articles ({{ list.articles.length }})</ion-label>
+    </ion-list-header>
+
+    <ion-item-sliding *ngFor="let article of list.articles; let i = index">
+      <ion-item>
+        <ion-label>{{ article.intitule }}</ion-label>
+        <ion-note slot="end">{{ article.prix | currency:'EUR' }}</ion-note>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="removeArticle(i)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+
+    <!-- Total -->
+    <ion-item color="light">
+      <ion-label><strong>Total</strong></ion-label>
+      <ion-note slot="end" color="primary" style="font-weight: bold; font-size: 1.1em;">
+        {{ total | currency:'EUR' }}
+      </ion-note>
+    </ion-item>
+  </ion-list>
+
+  <!-- Message vide -->
+  <ion-card *ngIf="list.articles.length === 0">
+    <ion-card-content class="ion-text-center">
+      <ion-icon name="basket-outline" style="font-size: 48px; color: var(--ion-color-medium);"></ion-icon>
+      <p>Aucun article dans la liste</p>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Boutons de validation -->
+  <ng-container *ngIf="list.articles.length > 0">
+    <!-- Liste non encore validée : deux choix -->
+    <ng-container *ngIf="!list.validated">
+      <ion-button expand="full" color="success" class="ion-margin-top" (click)="validerCourses()">
+        <ion-icon name="wallet-outline" slot="start"></ion-icon>
+        Valider (dans mes dépenses)
+      </ion-button>
+      <ion-button expand="full" color="medium" (click)="validerSansDepense()">
+        <ion-icon name="people-outline" slot="start"></ion-icon>
+        Valider (payé par quelqu'un d'autre)
+      </ion-button>
+    </ng-container>
+
+    <!-- Liste validée avec dépense : mettre à jour -->
+    <ng-container *ngIf="list.validated && list.selfPaid">
+      <ion-button expand="full" color="warning" class="ion-margin-top" (click)="validerCourses()">
+        <ion-icon name="refresh-outline" slot="start"></ion-icon>
+        Mettre à jour la dépense
+      </ion-button>
+      <ion-button expand="full" color="medium" (click)="validerSansDepense()">
+        <ion-icon name="people-outline" slot="start"></ion-icon>
+        Retirer de mes dépenses
+      </ion-button>
+    </ng-container>
+
+    <!-- Liste validée sans dépense : permettre de basculer -->
+    <ng-container *ngIf="list.validated && !list.selfPaid">
+      <ion-button expand="full" color="success" class="ion-margin-top" (click)="validerCourses()">
+        <ion-icon name="wallet-outline" slot="start"></ion-icon>
+        Ajouter dans mes dépenses
+      </ion-button>
+    </ng-container>
+  </ng-container>
+</ion-content>

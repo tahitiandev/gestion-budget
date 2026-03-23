@@ -1,20 +1,76 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Accueil</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+<ion-content class="ion-padding">
+  <!-- Spinner de chargement -->
+  <div *ngIf="loading" class="ion-text-center ion-padding">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Chargement des données...</p>
   </div>
+
+  <ng-container *ngIf="!loading">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Solde courant</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <h2>{{ soldeTotal | currency:'EUR' }}</h2>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card button routerLink="/epargne" [queryParams]="{from: 'home'}">
+      <ion-card-header>
+        <ion-card-title>Épargne</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <h2>{{ soldeEpargne | currency:'EUR' }}</h2>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block" color="success" routerLink="/revenus" [queryParams]="{from: 'home'}">
+            <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+            Apport
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button expand="block" color="danger" routerLink="/depenses" [queryParams]="{from: 'home'}">
+            <ion-icon name="remove-circle-outline" slot="start"></ion-icon>
+            Dépense
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Dernières transactions</ion-label>
+      </ion-list-header>
+
+      <ion-item-sliding *ngFor="let t of transactions.slice().reverse()">
+        <ion-item>
+          <ion-label>
+            <h3>{{ t.categorie }}</h3>
+            <p>{{ t.date | date:'shortDate' }} - {{ getDescription(t) }}</p>
+          </ion-label>
+          <ion-note slot="end" [color]="t.type === 'depense' ? 'danger' : 'success'">
+            {{ t.type === 'depense' ? '-' : '+' }}{{ t.montant | currency:'EUR' }}
+          </ion-note>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option color="danger" (click)="deleteTransaction(t.id)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </ng-container>
 </ion-content>

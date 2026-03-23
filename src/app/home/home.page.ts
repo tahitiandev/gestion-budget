@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { BudgetService, Transaction } from '../services/budget.service';
 
 @Component({
   selector: 'app-home',
@@ -6,8 +7,71 @@ import { Component } from '@angular/core';
   styleUrls: ['home.page.scss'],
   standalone: false,
 })
-export class HomePage {
+export class HomePage implements OnInit {
+  transactions: Transaction[] = [];
+  soldeTotal: number = 0;
+  soldeEpargne: number = 0;
+  loading = true;
 
-  constructor() {}
+  constructor(private budgetService: BudgetService) {}
 
+  async ngOnInit() {
+    await this.loadData();
+  }
+
+  async ionViewWillEnter() {
+    await this.loadData();
+  }
+
+  async loadData() {
+    this.loading = true;
+    await this.budgetService.syncDone;
+    this.transactions = await this.budgetService.getTransactions();
+    this.calculerSoldes();
+    this.loading = false;
+  }
+
+  calculerSoldes() {
+    let total = 0;
+    let epargne = 0;
+
+    for (let t of this.transactions) {
+      if (t.type === 'apport') {
+        if (t.categorie === 'epargne-apport') {
+          epargne += t.montant;
+        } else {
+          total += t.montant;
+        }
+      } else if (t.type === 'depense') {
+        total -= t.montant;
+      } else if (t.type === 'virement') {
+        if (t.categorie === 'epargne+') {
+          total -= t.montant;
+          epargne += t.montant;
+        } else if (t.categorie === 'epargne-') {
+          total += t.montant;
+          epargne -= t.montant;
+        }
+      }
+    }
+
+    this.soldeTotal = total;
+    this.soldeEpargne = epargne;
+  }
+
+  getDescription(t: Transaction): string {
+    if (t.categorie === 'course') {
+      const d = new Date(t.date);
+      const jj = String(d.getDate()).padStart(2, '0');
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const aa = String(d.getFullYear()).slice(-2);
+      return `Course du ${jj}/${mm}/${aa}`;
+    }
+    return t.commentaire || '';
+  }
+
+  async deleteTransaction(id: string) {
+    await this.budgetService.deleteTransaction(id);
+    await this.loadData();
+  }
 }

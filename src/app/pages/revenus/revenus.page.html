@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button *ngIf="showBackButton" defaultHref="/home"></ion-back-button>
+      <ion-menu-button *ngIf="!showBackButton"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Revenus</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Ajouter un revenu</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Catégorie</ion-label>
+        <ion-select [(ngModel)]="revenu.categorie">
+          <ion-select-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Montant</ion-label>
+        <ion-input type="number" [(ngModel)]="revenu.montant"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Commentaire (facultatif)</ion-label>
+        <ion-input [(ngModel)]="revenu.commentaire"></ion-input>
+      </ion-item>
+
+      <ion-button expand="full" class="ion-margin-top" (click)="addRevenu()">
+        Enregistrer
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Historique des revenus</ion-label>
+    </ion-list-header>
+
+    <ion-item-sliding *ngFor="let t of revenus">
+      <ion-item>
+        <ion-label>
+          <h3>{{ t.categorie }}</h3>
+          <p>{{ t.date | date:'shortDate' }} - {{ t.commentaire }}</p>
+        </ion-label>
+        <ion-note slot="end" color="success">
+          +{{ t.montant | currency:'EUR' }}
+        </ion-note>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="deleteRevenu(t.id)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+
+    <ion-item *ngIf="revenus.length === 0">
+      <ion-label class="ion-text-center">
+        <p>Aucun revenu enregistré</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
