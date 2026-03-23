@@ -65,6 +65,10 @@ yarn-error.log
 testem.log
 /typings
 
+# Firebase
+.firebase/
+/public
+
 # System files
 .DS_Store
 Thumbs.db
