@@ -45,7 +45,7 @@
     <ion-item-sliding *ngFor="let article of list.articles; let i = index">
       <ion-item>
         <ion-label>{{ article.intitule }}</ion-label>
-        <ion-note slot="end">{{ article.prix | currency:'EUR' }}</ion-note>
+        <ion-note slot="end">{{ article.prix | currency:'XPF':'XPF ':'1.0-0' }}</ion-note>
       </ion-item>
       <ion-item-options side="end">
         <ion-item-option color="danger" (click)="removeArticle(i)">
@@ -58,7 +58,7 @@
     <ion-item color="light">
       <ion-label><strong>Total</strong></ion-label>
       <ion-note slot="end" color="primary" style="font-weight: bold; font-size: 1.1em;">
-        {{ total | currency:'EUR' }}
+        {{ total | currency:'XPF':'XPF ':'1.0-0' }}
       </ion-note>
     </ion-item>
   </ion-list>

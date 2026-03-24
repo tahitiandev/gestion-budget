@@ -158,7 +158,7 @@ export class CoursesService {
     const list = await this.getCourseList(id);
     if (!list || list.articles.length === 0) return;
 
-    const detail = list.articles.map(a => `${a.intitule} (${a.prix.toFixed(2)}€)`).join(', ');
+    const detail = list.articles.map(a => `${a.intitule} (${a.prix.toFixed(0)}€)`).join(', ');
 
     if (list.validated && list.transactionId) {
       // Mise à jour de la transaction existante
@@ -221,7 +221,7 @@ export class CoursesService {
   private async updateLinkedTransaction(list: CourseList) {
     if (!list.transactionId) return;
 
-    const detail = list.articles.map(a => `${a.intitule} (${a.prix.toFixed(2)}€)`).join(', ');
+    const detail = list.articles.map(a => `${a.intitule} (${a.prix.toFixed(0)}€)`).join(', ');
 
     // Supprimer l'ancienne transaction et en créer une nouvelle avec le même commentaire
     await this.budgetService.deleteTransaction(list.transactionId);

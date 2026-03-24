@@ -14,7 +14,7 @@
       <ion-card-title>Solde épargne</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <h2>{{ soldeEpargne | currency:'EUR' }}</h2>
+      <h2>{{ soldeEpargne | currency:'XPF':'XPF ':'1.0-0' }}</h2>
     </ion-card-content>
   </ion-card>
 
@@ -60,7 +60,7 @@
           <p>{{ t.date | date:'shortDate' }} - {{ t.commentaire }}</p>
         </ion-label>
         <ion-note slot="end" [color]="getOperationColor(t)">
-          {{ getOperationSign(t) }}{{ t.montant | currency:'EUR' }}
+          {{ getOperationSign(t) }}{{ t.montant | currency:'XPF':'XPF ':'1.0-0' }}
         </ion-note>
       </ion-item>
       <ion-item-options side="end">

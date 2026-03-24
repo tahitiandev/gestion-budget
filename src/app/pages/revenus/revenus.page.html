@@ -49,7 +49,7 @@
           <p>{{ t.date | date:'shortDate' }} - {{ t.commentaire }}</p>
         </ion-label>
         <ion-note slot="end" color="success">
-          +{{ t.montant | currency:'EUR' }}
+          +{{ t.montant | currency:'XPF':'XPF ':'1.0-0' }}
         </ion-note>
       </ion-item>
       <ion-item-options side="end">

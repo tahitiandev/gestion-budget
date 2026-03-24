@@ -54,8 +54,8 @@ export class CoursesDetailPage {
     if (!this.list || this.list.articles.length === 0) return;
 
     const message = this.list.validated && this.list.selfPaid
-      ? `Mettre à jour la dépense associée avec le nouveau total de ${this.total.toFixed(2)}€ ?`
-      : `Valider et enregistrer ${this.total.toFixed(2)}€ dans vos dépenses ?`;
+      ? `Mettre à jour la dépense associée avec le nouveau total de ${this.total.toFixed(0)}€ ?`
+      : `Valider et enregistrer ${this.total.toFixed(0)}€ dans vos dépenses ?`;
 
     const alert = await this.alertController.create({
       header: this.list.validated && this.list.selfPaid ? 'Mettre à jour' : 'Confirmer',
@@ -80,7 +80,7 @@ export class CoursesDetailPage {
 
     const alert = await this.alertController.create({
       header: 'Valider sans dépense',
-      message: `Valider cette liste pour ${this.total.toFixed(2)}€ sans l'ajouter à vos dépenses ?`,
+      message: `Valider cette liste pour ${this.total.toFixed(0)}€ sans l'ajouter à vos dépenses ?`,
       buttons: [
         { text: 'Annuler', role: 'cancel' },
         {

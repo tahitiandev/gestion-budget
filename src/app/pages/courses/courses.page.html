@@ -33,7 +33,7 @@
           </p>
         </ion-label>
         <ion-note slot="end" [color]="list.validated && list.selfPaid ? 'danger' : 'medium'">
-          {{ list.total | currency:'EUR' }}
+          {{ list.total | currency:'XPF':'XPF ':'1.0-0' }}
         </ion-note>
       </ion-item>
       <ion-item-options side="end">

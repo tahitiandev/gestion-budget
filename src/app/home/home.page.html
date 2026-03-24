@@ -20,7 +20,7 @@
         <ion-card-title>Solde courant</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <h2>{{ soldeTotal | currency:'EUR' }}</h2>
+        <h2>{{ soldeTotal | currency:'XPF':'XPF ':'1.0-0' }}</h2>
       </ion-card-content>
     </ion-card>
 
@@ -29,7 +29,7 @@
         <ion-card-title>Épargne</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <h2>{{ soldeEpargne | currency:'EUR' }}</h2>
+        <h2>{{ soldeEpargne | currency:'XPF':'XPF ':'1.0-0' }}</h2>
       </ion-card-content>
     </ion-card>
 
@@ -62,7 +62,7 @@
             <p>{{ t.date | date:'shortDate' }} - {{ getDescription(t) }}</p>
           </ion-label>
           <ion-note slot="end" [color]="t.type === 'depense' ? 'danger' : 'success'">
-            {{ t.type === 'depense' ? '-' : '+' }}{{ t.montant | currency:'EUR' }}
+            {{ t.type === 'depense' ? '-' : '+' }}{{ t.montant | currency:'XPF':'XPF ':'1.0-0' }}
           </ion-note>
         </ion-item>
         <ion-item-options side="end">
