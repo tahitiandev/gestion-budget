@@ -16,7 +16,7 @@ export class EpargnePage {
   operations: Transaction[] = [];
 
   operationType: OperationType = 'courant-epargne';
-  montant: number = 0;
+  montant: number | null = null;
   commentaire = '';
 
   showBackButton = false;
@@ -86,7 +86,7 @@ export class EpargnePage {
 
     await this.budgetService.addTransaction(transaction);
 
-    this.montant = 0;
+    this.montant = null;
     this.commentaire = '';
     await this.loadData();
   }

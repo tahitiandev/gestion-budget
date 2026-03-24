@@ -18,7 +18,7 @@ export class RevenusPage {
     date: new Date().toISOString(),
     type: 'apport',
     categorie: '',
-    montant: 0,
+    montant: null as any,
     commentaire: ''
   };
 
@@ -48,7 +48,7 @@ export class RevenusPage {
       date: new Date().toISOString(),
       type: 'apport',
       categorie: '',
-      montant: 0,
+      montant: null as any,
       commentaire: ''
     };
 

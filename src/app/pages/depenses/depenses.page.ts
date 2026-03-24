@@ -18,7 +18,7 @@ export class DepensesPage {
     date: new Date().toISOString(),
     type: 'depense',
     categorie: '',
-    montant: 0,
+    montant: null as any,
     commentaire: ''
   };
 
@@ -48,7 +48,7 @@ export class DepensesPage {
       date: new Date().toISOString(),
       type: 'depense',
       categorie: '',
-      montant: 0,
+      montant: null as any,
       commentaire: ''
     };
 
