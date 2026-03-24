@@ -22,10 +22,10 @@ export class CourantPage {
   categoriesApport: string[] = [];
   categoriesDepense: string[] = [];
 
-  private readonly TRANSFERTS = [
-    { value: 'transfert-epargne', label: 'Transfert vers cpt épargne' },
-    { value: 'transfert-deblock', label: 'Transfert vers Deblock' }
-  ];
+  private readonly TRANSFER_LABELS: Record<string, string> = {
+    'transfert-epargne': 'Transfert vers cpt épargne',
+    'transfert-deblock': 'Transfert vers Deblock'
+  };
 
   showBackButton = false;
 
@@ -49,10 +49,10 @@ export class CourantPage {
     if (this.operationType === 'apport') {
       return this.categoriesApport.map(c => ({ value: c, label: c }));
     }
-    return [
-      ...this.categoriesDepense.map(c => ({ value: c, label: c })),
-      ...this.TRANSFERTS
-    ];
+    return this.categoriesDepense.map(c => ({
+      value: c,
+      label: this.TRANSFER_LABELS[c] || c
+    }));
   }
 
   private isTransfert(categorie: string): boolean {

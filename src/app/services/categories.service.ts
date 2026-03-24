@@ -9,9 +9,11 @@ export interface UserCategories {
 }
 
 const DEFAULT_CATEGORIES: UserCategories = {
-  depense: ['course', 'loyer', 'transport', 'loisirs', 'autre'],
+  depense: ['course', 'loyer', 'transport', 'loisirs', 'autre', 'transfert-epargne', 'transfert-deblock'],
   apport: ['salaire', 'prime', 'remboursement', 'divers']
 };
+
+export const PROTECTED_CATEGORIES = ['transfert-epargne', 'transfert-deblock'];
 
 @Injectable({
   providedIn: 'root'
@@ -59,7 +61,20 @@ export class CategoriesService {
 
   async getCategories(): Promise<UserCategories> {
     const local = await this.getLocal();
-    return local || { ...DEFAULT_CATEGORIES };
+    if (!local) return { depense: [...DEFAULT_CATEGORIES.depense], apport: [...DEFAULT_CATEGORIES.apport] };
+
+    // Ensure protected categories exist for existing users
+    let changed = false;
+    for (const cat of PROTECTED_CATEGORIES) {
+      if (!local.depense.includes(cat)) {
+        local.depense.push(cat);
+        changed = true;
+      }
+    }
+    if (changed) {
+      await this.saveCategories(local);
+    }
+    return local;
   }
 
   async saveCategories(categories: UserCategories) {
@@ -84,6 +99,7 @@ export class CategoriesService {
   }
 
   async removeCategory(type: 'depense' | 'apport', name: string) {
+    if (PROTECTED_CATEGORIES.includes(name)) return;
     const categories = await this.getCategories();
     categories[type] = categories[type].filter(c => c !== name);
     await this.saveCategories(categories);

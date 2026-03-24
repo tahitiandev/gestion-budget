@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AlertController } from '@ionic/angular';
-import { CategoriesService, UserCategories } from '../../services/categories.service';
+import { CategoriesService, UserCategories, PROTECTED_CATEGORIES } from '../../services/categories.service';
 import { ThemeService } from '../../services/theme.service';
 
 @Component({
@@ -54,6 +54,19 @@ export class ParametresPage {
     list.splice(to, 0, item);
     event.detail.complete();
     await this.categoriesService.saveCategories(this.categories);
+  }
+
+  private readonly TRANSFER_LABELS: Record<string, string> = {
+    'transfert-epargne': 'Transfert vers cpt épargne',
+    'transfert-deblock': 'Transfert vers Deblock'
+  };
+
+  isProtected(name: string): boolean {
+    return PROTECTED_CATEGORIES.includes(name);
+  }
+
+  getCategoryLabel(name: string): string {
+    return this.TRANSFER_LABELS[name] || name;
   }
 
   async removeCategory(type: 'depense' | 'apport', name: string) {
