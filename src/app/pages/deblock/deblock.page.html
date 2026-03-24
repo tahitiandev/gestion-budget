@@ -34,8 +34,13 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating">Montant</ion-label>
-        <ion-input type="number" [(ngModel)]="montant" (ionFocus)="selectInput($event)"></ion-input>
+        <ion-label position="floating">Montant (XPF)</ion-label>
+        <ion-input type="number" [(ngModel)]="montant" (ionFocus)="selectInput($event)" (ionChange)="onXpfChange()"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Montant (EUR)</ion-label>
+        <ion-input type="number" [(ngModel)]="montantEur" (ionFocus)="selectInput($event)" (ionChange)="onEurChange()"></ion-input>
       </ion-item>
 
       <ion-item>

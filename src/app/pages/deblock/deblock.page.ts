@@ -17,7 +17,11 @@ export class DeblockPage {
 
   operationType: OperationType = 'courant-deblock';
   montant: number = 0;
+  montantEur: number = 0;
+  devise: 'XPF' | 'EUR' = 'XPF';
   commentaire = '';
+
+  private readonly TAUX_EUR_XPF = 119.332;
 
   showBackButton = false;
 
@@ -54,6 +58,14 @@ export class DeblockPage {
 
   selectInput(event: any) {
     event.target.getInputElement().then((el: HTMLInputElement) => el.select());
+  }
+
+  onEurChange() {
+    this.montant = Math.round(this.montantEur * this.TAUX_EUR_XPF);
+  }
+
+  onXpfChange() {
+    this.montantEur = Math.round((this.montant / this.TAUX_EUR_XPF) * 100) / 100;
   }
 
   async addOperation() {
@@ -98,6 +110,7 @@ export class DeblockPage {
     await this.budgetService.addTransaction(transaction);
 
     this.montant = 0;
+    this.montantEur = 0;
     this.commentaire = '';
     await this.loadData();
   }
