@@ -42,8 +42,8 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'debloque',
-    loadChildren: () => import('./pages/debloque/debloque.module').then(m => m.DebloquePageModule),
+    path: 'deblock',
+    loadChildren: () => import('./pages/deblock/deblock.module').then(m => m.DeblockPageModule),
     canActivate: [AuthGuard]
   },
   {

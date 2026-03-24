@@ -12,7 +12,7 @@ export class HomePage implements OnInit {
   transactions: Transaction[] = [];
   soldeTotal: number = 0;
   soldeEpargne: number = 0;
-  soldeDebloque: number = 0;
+  soldeDeblock: number = 0;
   loading = true;
 
   constructor(private budgetService: BudgetService, private alertController: AlertController) {}
@@ -36,14 +36,14 @@ export class HomePage implements OnInit {
   calculerSoldes() {
     let total = 0;
     let epargne = 0;
-    let debloque = 0;
+    let deblock = 0;
 
     for (let t of this.transactions) {
       if (t.type === 'apport') {
         if (t.categorie === 'epargne-apport') {
           epargne += t.montant;
-        } else if (t.categorie === 'debloque-apport') {
-          debloque += t.montant;
+        } else if (t.categorie === 'deblock-apport') {
+          deblock += t.montant;
         } else {
           total += t.montant;
         }
@@ -56,21 +56,21 @@ export class HomePage implements OnInit {
         } else if (t.categorie === 'epargne-') {
           total += t.montant;
           epargne -= t.montant;
-        } else if (t.categorie === 'debloque+') {
+        } else if (t.categorie === 'deblock+') {
           total -= t.montant;
-          debloque += t.montant;
-        } else if (t.categorie === 'debloque-epargne') {
+          deblock += t.montant;
+        } else if (t.categorie === 'deblock-epargne') {
           epargne -= t.montant;
-          debloque += t.montant;
-        } else if (t.categorie === 'debloque-depense') {
-          debloque -= t.montant;
+          deblock += t.montant;
+        } else if (t.categorie === 'deblock-depense') {
+          deblock -= t.montant;
         }
       }
     }
 
     this.soldeTotal = total;
     this.soldeEpargne = epargne;
-    this.soldeDebloque = debloque;
+    this.soldeDeblock = deblock;
   }
 
   getDescription(t: Transaction): string {

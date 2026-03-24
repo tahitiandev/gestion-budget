@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { DebloquePageRoutingModule } from './debloque-routing.module';
+import { DeblockPageRoutingModule } from './deblock-routing.module';
 
-import { DebloquePage } from './debloque.page';
+import { DeblockPage } from './deblock.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    DebloquePageRoutingModule
+    DeblockPageRoutingModule
   ],
-  declarations: [DebloquePage]
+  declarations: [DeblockPage]
 })
-export class DebloquePageModule {}
+export class DeblockPageModule {}

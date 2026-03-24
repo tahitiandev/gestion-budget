@@ -3,19 +3,19 @@ import { ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { BudgetService, Transaction } from '../../services/budget.service';
 
-type OperationType = 'courant-debloque' | 'epargne-debloque' | 'apport-debloque' | 'depense-debloque';
+type OperationType = 'courant-deblock' | 'epargne-deblock' | 'apport-deblock' | 'depense-deblock';
 
 @Component({
-  selector: 'app-debloque',
-  templateUrl: './debloque.page.html',
-  styleUrls: ['./debloque.page.scss'],
+  selector: 'app-deblock',
+  templateUrl: './deblock.page.html',
+  styleUrls: ['./deblock.page.scss'],
   standalone: false,
 })
-export class DebloquePage {
-  soldeDebloque = 0;
+export class DeblockPage {
+  soldeDeblock = 0;
   operations: Transaction[] = [];
 
-  operationType: OperationType = 'courant-debloque';
+  operationType: OperationType = 'courant-deblock';
   montant: number = 0;
   commentaire = '';
 
@@ -32,22 +32,22 @@ export class DebloquePage {
   async loadData() {
     const all = await this.budgetService.getTransactions();
 
-    let debloque = 0;
+    let deblock = 0;
     for (const t of all) {
       if (t.type === 'virement') {
-        if (t.categorie === 'debloque+') debloque += t.montant;
-        else if (t.categorie === 'debloque-epargne') debloque += t.montant;
-        else if (t.categorie === 'debloque-depense') debloque -= t.montant;
-      } else if (t.type === 'apport' && t.categorie === 'debloque-apport') {
-        debloque += t.montant;
+        if (t.categorie === 'deblock+') deblock += t.montant;
+        else if (t.categorie === 'deblock-epargne') deblock += t.montant;
+        else if (t.categorie === 'deblock-depense') deblock -= t.montant;
+      } else if (t.type === 'apport' && t.categorie === 'deblock-apport') {
+        deblock += t.montant;
       }
     }
-    this.soldeDebloque = debloque;
+    this.soldeDeblock = deblock;
 
     this.operations = all
       .filter(t =>
-        (t.type === 'virement' && ['debloque+', 'debloque-epargne', 'debloque-depense'].includes(t.categorie)) ||
-        (t.type === 'apport' && t.categorie === 'debloque-apport')
+        (t.type === 'virement' && ['deblock+', 'deblock-epargne', 'deblock-depense'].includes(t.categorie)) ||
+        (t.type === 'apport' && t.categorie === 'deblock-apport')
       )
       .reverse();
   }
@@ -57,37 +57,37 @@ export class DebloquePage {
 
     let transaction: Omit<Transaction, 'id' | 'userId'>;
 
-    if (this.operationType === 'courant-debloque') {
+    if (this.operationType === 'courant-deblock') {
       transaction = {
         date: new Date().toISOString(),
         type: 'virement',
-        categorie: 'debloque+',
+        categorie: 'deblock+',
         montant: this.montant,
-        commentaire: this.commentaire || 'Transfert courant → débloqué'
+        commentaire: this.commentaire || 'Transfert courant → Deblock'
       };
-    } else if (this.operationType === 'epargne-debloque') {
+    } else if (this.operationType === 'epargne-deblock') {
       transaction = {
         date: new Date().toISOString(),
         type: 'virement',
-        categorie: 'debloque-epargne',
+        categorie: 'deblock-epargne',
         montant: this.montant,
-        commentaire: this.commentaire || 'Transfert épargne → débloqué'
+        commentaire: this.commentaire || 'Transfert épargne → Deblock'
       };
-    } else if (this.operationType === 'apport-debloque') {
+    } else if (this.operationType === 'apport-deblock') {
       transaction = {
         date: new Date().toISOString(),
         type: 'apport',
-        categorie: 'debloque-apport',
+        categorie: 'deblock-apport',
         montant: this.montant,
-        commentaire: this.commentaire || 'Apport débloqué'
+        commentaire: this.commentaire || 'Apport Deblock'
       };
     } else {
       transaction = {
         date: new Date().toISOString(),
         type: 'virement',
-        categorie: 'debloque-depense',
+        categorie: 'deblock-depense',
         montant: this.montant,
-        commentaire: this.commentaire || 'Dépense débloqué'
+        commentaire: this.commentaire || 'Dépense Deblock'
       };
     }
 
@@ -124,20 +124,20 @@ export class DebloquePage {
   }
 
   getOperationLabel(t: Transaction): string {
-    if (t.categorie === 'debloque+') return 'Courant → Débloqué';
-    if (t.categorie === 'debloque-epargne') return 'Épargne → Débloqué';
-    if (t.categorie === 'debloque-apport') return 'Apport direct';
-    if (t.categorie === 'debloque-depense') return 'Dépense';
+    if (t.categorie === 'deblock+') return 'Courant → Deblock';
+    if (t.categorie === 'deblock-epargne') return 'Épargne → Deblock';
+    if (t.categorie === 'deblock-apport') return 'Apport direct';
+    if (t.categorie === 'deblock-depense') return 'Dépense';
     return t.categorie;
   }
 
   getOperationSign(t: Transaction): string {
-    if (t.categorie === 'debloque-depense') return '-';
+    if (t.categorie === 'deblock-depense') return '-';
     return '+';
   }
 
   getOperationColor(t: Transaction): string {
-    if (t.categorie === 'debloque-depense') return 'danger';
+    if (t.categorie === 'deblock-depense') return 'danger';
     return 'success';
   }
 }

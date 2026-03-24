@@ -4,17 +4,17 @@
       <ion-back-button *ngIf="showBackButton" defaultHref="/home"></ion-back-button>
       <ion-menu-button *ngIf="!showBackButton"></ion-menu-button>
     </ion-buttons>
-    <ion-title>Débloqué</ion-title>
+    <ion-title>Deblock</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Solde débloqué</ion-card-title>
+      <ion-card-title>Solde Deblock</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <h2>{{ soldeDebloque | currency:'XPF':'XPF ':'1.0-0' }}</h2>
+      <h2>{{ soldeDeblock | currency:'XPF':'XPF ':'1.0-0' }}</h2>
     </ion-card-content>
   </ion-card>
 
@@ -26,10 +26,10 @@
       <ion-item>
         <ion-label>Type</ion-label>
         <ion-select [(ngModel)]="operationType">
-          <ion-select-option value="courant-debloque">Courant → Débloqué</ion-select-option>
-          <ion-select-option value="epargne-debloque">Épargne → Débloqué</ion-select-option>
-          <ion-select-option value="apport-debloque">Apport direct</ion-select-option>
-          <ion-select-option value="depense-debloque">Dépense</ion-select-option>
+          <ion-select-option value="courant-deblock">Courant → Deblock</ion-select-option>
+          <ion-select-option value="epargne-deblock">Épargne → Deblock</ion-select-option>
+          <ion-select-option value="apport-deblock">Apport direct</ion-select-option>
+          <ion-select-option value="depense-deblock">Dépense</ion-select-option>
         </ion-select>
       </ion-item>
 
@@ -51,7 +51,7 @@
 
   <ion-list>
     <ion-list-header>
-      <ion-label>Historique débloqué</ion-label>
+      <ion-label>Historique Deblock</ion-label>
     </ion-list-header>
 
     <ion-item-sliding *ngFor="let t of operations">
