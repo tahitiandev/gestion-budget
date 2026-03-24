@@ -15,7 +15,7 @@
   </div>
 
   <ng-container *ngIf="!loading">
-    <ion-card>
+    <ion-card button routerLink="/courant" [queryParams]="{from: 'home'}">
       <ion-card-header>
         <ion-card-title>Solde courant</ion-card-title>
       </ion-card-header>
@@ -41,23 +41,6 @@
         <h2>{{ soldeDeblock | currency:'XPF':'XPF ':'1.0-0' }}</h2>
       </ion-card-content>
     </ion-card>
-
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <ion-button expand="block" color="success" routerLink="/revenus" [queryParams]="{from: 'home'}">
-            <ion-icon name="add-circle-outline" slot="start"></ion-icon>
-            Apport
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button expand="block" color="danger" routerLink="/depenses" [queryParams]="{from: 'home'}">
-            <ion-icon name="remove-circle-outline" slot="start"></ion-icon>
-            Dépense
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
 
     <ion-list>
       <ion-list-header>

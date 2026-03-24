@@ -22,18 +22,8 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'add',
-    loadChildren: () => import('./pages/add/add.module').then(m => m.AddPageModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'depenses',
-    loadChildren: () => import('./pages/depenses/depenses.module').then(m => m.DepensesPageModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'revenus',
-    loadChildren: () => import('./pages/revenus/revenus.module').then(m => m.RevenusPageModule),
+    path: 'courant',
+    loadChildren: () => import('./pages/courant/courant.module').then(m => m.CourantPageModule),
     canActivate: [AuthGuard]
   },
   {
