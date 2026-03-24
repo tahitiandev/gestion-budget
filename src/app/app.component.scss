@@ -2,3 +2,9 @@ ion-item.selected {
   --color: var(--ion-color-primary);
   font-weight: bold;
 }
+
+.menu-divider {
+  height: 1px;
+  background: var(--ion-color-light-shade, #d7d8da);
+  margin: 8px 16px;
+}

@@ -11,7 +11,7 @@
         <ion-label>{{ userEmail }}</ion-label>
       </ion-item>
 
-      <ion-list>
+      <ion-list lines="none">
         <ion-menu-toggle auto-hide="false">
           <ion-item routerLink="/home" routerLinkActive="selected" routerDirection="root">
             <ion-icon name="home-outline" slot="start"></ion-icon>
@@ -38,7 +38,9 @@
         </ion-menu-toggle>
       </ion-list>
 
-      <ion-list>
+      <div class="menu-divider"></div>
+
+      <ion-list lines="none">
         <ion-menu-toggle auto-hide="false">
           <ion-item routerLink="/courses" routerLinkActive="selected" routerDirection="root">
             <ion-icon name="basket-outline" slot="start"></ion-icon>
@@ -47,7 +49,9 @@
         </ion-menu-toggle>
       </ion-list>
 
-      <ion-list>
+      <div class="menu-divider"></div>
+
+      <ion-list lines="none">
         <ion-menu-toggle auto-hide="false">
           <ion-item routerLink="/parametres" routerLinkActive="selected" routerDirection="root">
             <ion-icon name="settings-outline" slot="start"></ion-icon>
