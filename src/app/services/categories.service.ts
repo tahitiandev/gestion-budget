@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { db } from './firebase.service';
 import { AuthService } from './auth.service';
+import { BudgetService } from './budget.service';
 
 export interface UserCategories {
   depense: string[];
@@ -22,7 +23,7 @@ export class CategoriesService {
   private readonly COLLECTION = 'userCategories';
   private readonly STORAGE_KEY = 'userCategories';
 
-  constructor(private storage: Storage, private authService: AuthService) {
+  constructor(private storage: Storage, private authService: AuthService, private budgetService: BudgetService) {
     this.init();
   }
 
@@ -96,6 +97,28 @@ export class CategoriesService {
     if (!normalized || categories[type].includes(normalized)) return;
     categories[type].push(normalized);
     await this.saveCategories(categories);
+  }
+
+  async renameCategory(type: 'depense' | 'apport', oldName: string, newName: string) {
+    if (PROTECTED_CATEGORIES.includes(oldName)) return;
+    const normalized = newName.trim().toLowerCase();
+    if (!normalized || normalized === oldName) return;
+
+    const categories = await this.getCategories();
+    const index = categories[type].indexOf(oldName);
+    if (index === -1) return;
+    if (categories[type].includes(normalized)) return;
+
+    categories[type][index] = normalized;
+    await this.saveCategories(categories);
+
+    // Update all transactions with the old category name
+    const transactions = await this.budgetService.getTransactions();
+    for (const t of transactions) {
+      if (t.categorie === oldName && t.type === type) {
+        await this.budgetService.updateTransaction(t.id, { categorie: normalized });
+      }
+    }
   }
 
   async removeCategory(type: 'depense' | 'apport', name: string) {

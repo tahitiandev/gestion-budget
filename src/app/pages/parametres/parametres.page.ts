@@ -69,6 +69,27 @@ export class ParametresPage {
     return this.TRANSFER_LABELS[name] || name;
   }
 
+  async renameCategory(type: 'depense' | 'apport', name: string) {
+    if (this.isProtected(name)) return;
+    const alert = await this.alertController.create({
+      header: 'Renommer',
+      inputs: [{ name: 'newName', type: 'text', value: name, placeholder: 'Nouveau nom' }],
+      buttons: [
+        { text: 'Annuler', role: 'cancel' },
+        {
+          text: 'Valider',
+          handler: async (data) => {
+            const newName = data.newName?.trim().toLowerCase();
+            if (!newName || newName === name) return;
+            await this.categoriesService.renameCategory(type, name, newName);
+            this.categories = await this.categoriesService.getCategories();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
   async removeCategory(type: 'depense' | 'apport', name: string) {
     const alert = await this.alertController.create({
       header: 'Supprimer',

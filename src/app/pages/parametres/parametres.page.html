@@ -33,6 +33,9 @@
           <ion-item *ngFor="let cat of categories.depense">
             <ion-icon [name]="isProtected(cat) ? 'swap-horizontal-outline' : 'pricetag-outline'" slot="start" color="danger"></ion-icon>
             <ion-label>{{ getCategoryLabel(cat) }}</ion-label>
+            <ion-button *ngIf="!isProtected(cat)" slot="end" fill="clear" color="medium" (click)="renameCategory('depense', cat)">
+              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+            </ion-button>
             <ion-button *ngIf="!isProtected(cat)" slot="end" fill="clear" color="danger" (click)="removeCategory('depense', cat)">
               <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
             </ion-button>
@@ -63,6 +66,9 @@
           <ion-item *ngFor="let cat of categories.apport">
             <ion-icon name="pricetag-outline" slot="start" color="success"></ion-icon>
             <ion-label>{{ cat }}</ion-label>
+            <ion-button slot="end" fill="clear" color="medium" (click)="renameCategory('apport', cat)">
+              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+            </ion-button>
             <ion-button slot="end" fill="clear" color="danger" (click)="removeCategory('apport', cat)">
               <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
             </ion-button>
