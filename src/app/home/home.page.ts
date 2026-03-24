@@ -59,6 +59,9 @@ export class HomePage implements OnInit {
         } else if (t.categorie === 'deblock+') {
           total -= t.montant;
           deblock += t.montant;
+        } else if (t.categorie === 'deblock-courant') {
+          total += t.montant;
+          deblock -= t.montant;
         } else if (t.categorie === 'deblock-epargne') {
           epargne -= t.montant;
           deblock += t.montant;

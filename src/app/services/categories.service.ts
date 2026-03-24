@@ -11,10 +11,10 @@ export interface UserCategories {
 
 const DEFAULT_CATEGORIES: UserCategories = {
   depense: ['course', 'loyer', 'transport', 'loisirs', 'autre', 'transfert-epargne', 'transfert-deblock'],
-  apport: ['salaire', 'prime', 'remboursement', 'divers']
+  apport: ['salaire', 'prime', 'remboursement', 'divers', 'transfert-epargne-cc', 'transfert-deblock-cc']
 };
 
-export const PROTECTED_CATEGORIES = ['transfert-epargne', 'transfert-deblock'];
+export const PROTECTED_CATEGORIES = ['transfert-epargne', 'transfert-deblock', 'transfert-epargne-cc', 'transfert-deblock-cc'];
 
 @Injectable({
   providedIn: 'root'
@@ -66,9 +66,17 @@ export class CategoriesService {
 
     // Ensure protected categories exist for existing users
     let changed = false;
-    for (const cat of PROTECTED_CATEGORIES) {
+    const depenseProtected = ['transfert-epargne', 'transfert-deblock'];
+    const apportProtected = ['transfert-epargne-cc', 'transfert-deblock-cc'];
+    for (const cat of depenseProtected) {
       if (!local.depense.includes(cat)) {
         local.depense.push(cat);
+        changed = true;
+      }
+    }
+    for (const cat of apportProtected) {
+      if (!local.apport.includes(cat)) {
+        local.apport.push(cat);
         changed = true;
       }
     }

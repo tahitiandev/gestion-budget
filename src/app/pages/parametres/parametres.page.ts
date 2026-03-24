@@ -58,7 +58,9 @@ export class ParametresPage {
 
   private readonly TRANSFER_LABELS: Record<string, string> = {
     'transfert-epargne': 'Transfert vers cpt épargne',
-    'transfert-deblock': 'Transfert vers Deblock'
+    'transfert-deblock': 'Transfert vers Deblock',
+    'transfert-epargne-cc': 'Transfert épargne vers cc',
+    'transfert-deblock-cc': 'Transfert Deblock vers cc'
   };
 
   isProtected(name: string): boolean {

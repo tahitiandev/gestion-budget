@@ -41,6 +41,7 @@ export class DeblockPage {
       if (t.type === 'virement') {
         if (t.categorie === 'deblock+') deblock += t.montant;
         else if (t.categorie === 'deblock-epargne') deblock += t.montant;
+        else if (t.categorie === 'deblock-courant') deblock -= t.montant;
         else if (t.categorie === 'deblock-depense') deblock -= t.montant;
       } else if (t.type === 'apport' && t.categorie === 'deblock-apport') {
         deblock += t.montant;
@@ -50,7 +51,7 @@ export class DeblockPage {
 
     this.operations = all
       .filter(t =>
-        (t.type === 'virement' && ['deblock+', 'deblock-epargne', 'deblock-depense'].includes(t.categorie)) ||
+        (t.type === 'virement' && ['deblock+', 'deblock-courant', 'deblock-epargne', 'deblock-depense'].includes(t.categorie)) ||
         (t.type === 'apport' && t.categorie === 'deblock-apport')
       )
       .reverse();
@@ -142,6 +143,7 @@ export class DeblockPage {
 
   getOperationLabel(t: Transaction): string {
     if (t.categorie === 'deblock+') return 'Courant → Deblock';
+    if (t.categorie === 'deblock-courant') return 'Deblock → Courant';
     if (t.categorie === 'deblock-epargne') return 'Épargne → Deblock';
     if (t.categorie === 'deblock-apport') return 'Apport direct';
     if (t.categorie === 'deblock-depense') return 'Dépense';
@@ -149,12 +151,12 @@ export class DeblockPage {
   }
 
   getOperationSign(t: Transaction): string {
-    if (t.categorie === 'deblock-depense') return '-';
+    if (t.categorie === 'deblock-depense' || t.categorie === 'deblock-courant') return '-';
     return '+';
   }
 
   getOperationColor(t: Transaction): string {
-    if (t.categorie === 'deblock-depense') return 'danger';
+    if (t.categorie === 'deblock-depense' || t.categorie === 'deblock-courant') return 'danger';
     return 'success';
   }
 }
