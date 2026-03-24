@@ -33,6 +33,15 @@
       </ion-card-content>
     </ion-card>
 
+    <ion-card button routerLink="/debloque" [queryParams]="{from: 'home'}">
+      <ion-card-header>
+        <ion-card-title>Débloqué</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <h2>{{ soldeDebloque | currency:'XPF':'XPF ':'1.0-0' }}</h2>
+      </ion-card-content>
+    </ion-card>
+
     <ion-grid>
       <ion-row>
         <ion-col>
