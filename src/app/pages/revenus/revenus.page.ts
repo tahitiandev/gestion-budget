@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { BudgetService, Transaction } from '../../services/budget.service';
 import { CategoriesService } from '../../services/categories.service';
 
@@ -23,7 +24,7 @@ export class RevenusPage {
 
   showBackButton = false;
 
-  constructor(private budgetService: BudgetService, private categoriesService: CategoriesService, private route: ActivatedRoute) {
+  constructor(private budgetService: BudgetService, private categoriesService: CategoriesService, private alertController: AlertController, private route: ActivatedRoute) {
     this.showBackButton = this.route.snapshot.queryParams['from'] === 'home';
   }
 
@@ -52,6 +53,26 @@ export class RevenusPage {
     };
 
     await this.loadRevenus();
+  }
+
+  async editMontant(t: Transaction) {
+    const alert = await this.alertController.create({
+      header: 'Modifier le montant',
+      inputs: [{ name: 'montant', type: 'number', value: t.montant, placeholder: 'Montant' }],
+      buttons: [
+        { text: 'Annuler', role: 'cancel' },
+        {
+          text: 'Valider',
+          handler: async (data) => {
+            const montant = parseFloat(data.montant);
+            if (!montant || montant <= 0) return;
+            await this.budgetService.updateTransaction(t.id, { montant });
+            await this.loadRevenus();
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   async deleteRevenu(id: string) {

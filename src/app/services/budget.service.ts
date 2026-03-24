@@ -124,6 +124,15 @@ export class BudgetService {
     await this.pushToFirestore(newTransaction);
   }
 
+  async updateTransaction(id: string, changes: Partial<Pick<Transaction, 'montant' | 'commentaire' | 'categorie'>>) {
+    const transactions = await this.getLocal();
+    const index = transactions.findIndex(t => t.id === id);
+    if (index === -1) return;
+    Object.assign(transactions[index], changes);
+    await this.saveLocal(transactions);
+    await this.pushToFirestore(transactions[index]);
+  }
+
   async deleteTransaction(id: string) {
     const transactions = await this.getLocal();
     const filtered = transactions.filter(t => t.id !== id);

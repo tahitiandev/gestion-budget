@@ -48,7 +48,7 @@
           <h3>{{ t.categorie }}</h3>
           <p>{{ t.date | date:'shortDate' }} - {{ t.commentaire }}</p>
         </ion-label>
-        <ion-note slot="end" color="danger">
+        <ion-note slot="end" color="danger" (click)="editMontant(t)" style="cursor: pointer;">
           -{{ t.montant | currency:'XPF':'XPF ':'1.0-0' }}
         </ion-note>
       </ion-item>

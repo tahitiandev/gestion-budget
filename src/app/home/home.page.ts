@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 import { BudgetService, Transaction } from '../services/budget.service';
 
 @Component({
@@ -13,7 +14,7 @@ export class HomePage implements OnInit {
   soldeEpargne: number = 0;
   loading = true;
 
-  constructor(private budgetService: BudgetService) {}
+  constructor(private budgetService: BudgetService, private alertController: AlertController) {}
 
   async ngOnInit() {
     await this.loadData();
@@ -68,6 +69,26 @@ export class HomePage implements OnInit {
       return `Course du ${jj}/${mm}/${aa}`;
     }
     return t.commentaire || '';
+  }
+
+  async editMontant(t: Transaction) {
+    const alert = await this.alertController.create({
+      header: 'Modifier le montant',
+      inputs: [{ name: 'montant', type: 'number', value: t.montant, placeholder: 'Montant' }],
+      buttons: [
+        { text: 'Annuler', role: 'cancel' },
+        {
+          text: 'Valider',
+          handler: async (data) => {
+            const montant = parseFloat(data.montant);
+            if (!montant || montant <= 0) return;
+            await this.budgetService.updateTransaction(t.id, { montant });
+            await this.loadData();
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   async deleteTransaction(id: string) {

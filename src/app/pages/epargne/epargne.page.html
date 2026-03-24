@@ -59,7 +59,7 @@
           <h3>{{ getOperationLabel(t) }}</h3>
           <p>{{ t.date | date:'shortDate' }} - {{ t.commentaire }}</p>
         </ion-label>
-        <ion-note slot="end" [color]="getOperationColor(t)">
+        <ion-note slot="end" [color]="getOperationColor(t)" (click)="editMontant(t)" style="cursor: pointer;">
           {{ getOperationSign(t) }}{{ t.montant | currency:'XPF':'XPF ':'1.0-0' }}
         </ion-note>
       </ion-item>
