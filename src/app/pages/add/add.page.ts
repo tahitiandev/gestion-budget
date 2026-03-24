@@ -14,7 +14,7 @@ export class AddPage {
     date: new Date().toISOString(),
     type: 'apport',
     categorie: '',
-    montant: null as any,
+    montant: 0,
     commentaire: ''
   };
 
@@ -30,6 +30,10 @@ export class AddPage {
     const cats = await this.categoriesService.getCategories();
     this.categories['apport'] = cats.apport;
     this.categories['depense'] = cats.depense;
+  }
+
+  selectInput(event: any) {
+    event.target.getInputElement().then((el: HTMLInputElement) => el.select());
   }
 
   async save() {

@@ -18,7 +18,7 @@ export class DepensesPage {
     date: new Date().toISOString(),
     type: 'depense',
     categorie: '',
-    montant: null as any,
+    montant: 0,
     commentaire: ''
   };
 
@@ -48,7 +48,7 @@ export class DepensesPage {
       date: new Date().toISOString(),
       type: 'depense',
       categorie: '',
-      montant: null as any,
+      montant: 0,
       commentaire: ''
     };
 
@@ -73,6 +73,10 @@ export class DepensesPage {
       ]
     });
     await alert.present();
+  }
+
+  selectInput(event: any) {
+    event.target.getInputElement().then((el: HTMLInputElement) => el.select());
   }
 
   async deleteDepense(id: string) {

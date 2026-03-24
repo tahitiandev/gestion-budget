@@ -16,7 +16,7 @@ export class DeblockPage {
   operations: Transaction[] = [];
 
   operationType: OperationType = 'courant-deblock';
-  montant: number | null = null;
+  montant: number = 0;
   commentaire = '';
 
   showBackButton = false;
@@ -50,6 +50,10 @@ export class DeblockPage {
         (t.type === 'apport' && t.categorie === 'deblock-apport')
       )
       .reverse();
+  }
+
+  selectInput(event: any) {
+    event.target.getInputElement().then((el: HTMLInputElement) => el.select());
   }
 
   async addOperation() {
@@ -93,7 +97,7 @@ export class DeblockPage {
 
     await this.budgetService.addTransaction(transaction);
 
-    this.montant = null;
+    this.montant = 0;
     this.commentaire = '';
     await this.loadData();
   }

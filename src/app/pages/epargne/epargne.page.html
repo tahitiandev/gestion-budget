@@ -34,7 +34,7 @@
 
       <ion-item>
         <ion-label position="floating">Montant</ion-label>
-        <ion-input type="number" [(ngModel)]="montant" placeholder="Montant"></ion-input>
+        <ion-input type="number" [(ngModel)]="montant" (ionFocus)="selectInput($event)"></ion-input>
       </ion-item>
 
       <ion-item>
@@ -42,7 +42,7 @@
         <ion-input [(ngModel)]="commentaire"></ion-input>
       </ion-item>
 
-      <ion-button expand="full" class="ion-margin-top" (click)="addOperation()" [disabled]="!montant || montant! <= 0">
+      <ion-button expand="full" class="ion-margin-top" (click)="addOperation()" [disabled]="!montant || montant <= 0">
         Enregistrer
       </ion-button>
     </ion-card-content>

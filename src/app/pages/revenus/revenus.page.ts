@@ -18,7 +18,7 @@ export class RevenusPage {
     date: new Date().toISOString(),
     type: 'apport',
     categorie: '',
-    montant: null as any,
+    montant: 0,
     commentaire: ''
   };
 
@@ -48,7 +48,7 @@ export class RevenusPage {
       date: new Date().toISOString(),
       type: 'apport',
       categorie: '',
-      montant: null as any,
+      montant: 0,
       commentaire: ''
     };
 
@@ -73,6 +73,10 @@ export class RevenusPage {
       ]
     });
     await alert.present();
+  }
+
+  selectInput(event: any) {
+    event.target.getInputElement().then((el: HTMLInputElement) => el.select());
   }
 
   async deleteRevenu(id: string) {
