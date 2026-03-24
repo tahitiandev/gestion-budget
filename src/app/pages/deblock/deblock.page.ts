@@ -16,8 +16,8 @@ export class DeblockPage {
   operations: Transaction[] = [];
 
   operationType: OperationType = 'courant-deblock';
+  montantSaisi: number = 0;
   montant: number = 0;
-  montantEur: number = 0;
   devise: 'XPF' | 'EUR' = 'XPF';
   commentaire = '';
 
@@ -60,12 +60,12 @@ export class DeblockPage {
     event.target.getInputElement().then((el: HTMLInputElement) => el.select());
   }
 
-  onEurChange() {
-    this.montant = Math.round(this.montantEur * this.TAUX_EUR_XPF);
-  }
-
-  onXpfChange() {
-    this.montantEur = Math.round((this.montant / this.TAUX_EUR_XPF) * 100) / 100;
+  onMontantChange() {
+    if (this.devise === 'EUR') {
+      this.montant = Math.round(this.montantSaisi * this.TAUX_EUR_XPF);
+    } else {
+      this.montant = this.montantSaisi;
+    }
   }
 
   async addOperation() {
@@ -109,8 +109,8 @@ export class DeblockPage {
 
     await this.budgetService.addTransaction(transaction);
 
+    this.montantSaisi = 0;
     this.montant = 0;
-    this.montantEur = 0;
     this.commentaire = '';
     await this.loadData();
   }

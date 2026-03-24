@@ -33,22 +33,29 @@
         </ion-select>
       </ion-item>
 
-      <ion-item>
-        <ion-label position="floating">Montant (XPF)</ion-label>
-        <ion-input type="number" [(ngModel)]="montant" (ionFocus)="selectInput($event)" (ionChange)="onXpfChange()"></ion-input>
-      </ion-item>
+      <ion-segment [(ngModel)]="devise" class="ion-margin-bottom">
+        <ion-segment-button value="XPF">
+          <ion-label>XPF</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="EUR">
+          <ion-label>EUR</ion-label>
+        </ion-segment-button>
+      </ion-segment>
 
       <ion-item>
-        <ion-label position="floating">Montant (EUR)</ion-label>
-        <ion-input type="number" [(ngModel)]="montantEur" (ionFocus)="selectInput($event)" (ionChange)="onEurChange()"></ion-input>
+        <ion-label position="floating">Montant ({{ devise }})</ion-label>
+        <ion-input type="number" [(ngModel)]="montantSaisi" (ionFocus)="selectInput($event)" (ionChange)="onMontantChange()"></ion-input>
       </ion-item>
+      <p *ngIf="devise === 'EUR' && montantSaisi > 0" class="conversion-text ion-padding-start">
+        = {{ montant | currency:'XPF':'XPF ':'1.0-0' }}
+      </p>
 
       <ion-item>
         <ion-label position="floating">Commentaire (facultatif)</ion-label>
         <ion-input [(ngModel)]="commentaire"></ion-input>
       </ion-item>
 
-      <ion-button expand="full" class="ion-margin-top" (click)="addOperation()" [disabled]="!montant || montant <= 0">
+      <ion-button expand="full" class="ion-margin-top" (click)="addOperation()" [disabled]="!montantSaisi || montantSaisi <= 0">
         Enregistrer
       </ion-button>
     </ion-card-content>
