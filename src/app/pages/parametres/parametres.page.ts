@@ -46,6 +46,16 @@ export class ParametresPage {
     this.newApport = '';
   }
 
+  async reorderCategories(type: 'depense' | 'apport', event: any) {
+    const from = event.detail.from;
+    const to = event.detail.to;
+    const list = this.categories[type];
+    const item = list.splice(from, 1)[0];
+    list.splice(to, 0, item);
+    event.detail.complete();
+    await this.categoriesService.saveCategories(this.categories);
+  }
+
   async removeCategory(type: 'depense' | 'apport', name: string) {
     const alert = await this.alertController.create({
       header: 'Supprimer',
