@@ -22,6 +22,11 @@ export class CourantPage {
   categoriesApport: string[] = [];
   categoriesDepense: string[] = [];
 
+  private readonly TRANSFERTS = [
+    { value: 'transfert-epargne', label: 'Transfert vers cpt épargne' },
+    { value: 'transfert-deblock', label: 'Transfert vers Deblock' }
+  ];
+
   showBackButton = false;
 
   constructor(
@@ -40,8 +45,18 @@ export class CourantPage {
     await this.loadData();
   }
 
-  get categories(): string[] {
-    return this.operationType === 'apport' ? this.categoriesApport : this.categoriesDepense;
+  get categories(): { value: string; label: string }[] {
+    if (this.operationType === 'apport') {
+      return this.categoriesApport.map(c => ({ value: c, label: c }));
+    }
+    return [
+      ...this.categoriesDepense.map(c => ({ value: c, label: c })),
+      ...this.TRANSFERTS
+    ];
+  }
+
+  private isTransfert(categorie: string): boolean {
+    return categorie === 'transfert-epargne' || categorie === 'transfert-deblock';
   }
 
   onTypeChange() {
@@ -68,7 +83,8 @@ export class CourantPage {
     this.operations = all
       .filter(t =>
         (t.type === 'apport' && t.categorie !== 'epargne-apport' && t.categorie !== 'deblock-apport') ||
-        t.type === 'depense'
+        t.type === 'depense' ||
+        (t.type === 'virement' && (t.categorie === 'epargne+' || t.categorie === 'deblock+'))
       )
       .reverse();
   }
@@ -80,13 +96,33 @@ export class CourantPage {
   async addOperation() {
     if (!this.montant || this.montant <= 0 || !this.categorie) return;
 
-    const transaction: Omit<Transaction, 'id' | 'userId'> = {
-      date: new Date().toISOString(),
-      type: this.operationType,
-      categorie: this.categorie,
-      montant: this.montant,
-      commentaire: this.commentaire || ''
-    };
+    let transaction: Omit<Transaction, 'id' | 'userId'>;
+
+    if (this.categorie === 'transfert-epargne') {
+      transaction = {
+        date: new Date().toISOString(),
+        type: 'virement',
+        categorie: 'epargne+',
+        montant: this.montant,
+        commentaire: this.commentaire || 'Transfert vers épargne'
+      };
+    } else if (this.categorie === 'transfert-deblock') {
+      transaction = {
+        date: new Date().toISOString(),
+        type: 'virement',
+        categorie: 'deblock+',
+        montant: this.montant,
+        commentaire: this.commentaire || 'Transfert vers Deblock'
+      };
+    } else {
+      transaction = {
+        date: new Date().toISOString(),
+        type: this.operationType,
+        categorie: this.categorie,
+        montant: this.montant,
+        commentaire: this.commentaire || ''
+      };
+    }
 
     await this.budgetService.addTransaction(transaction);
 
@@ -122,11 +158,17 @@ export class CourantPage {
   }
 
   getOperationSign(t: Transaction): string {
-    return t.type === 'depense' ? '-' : '+';
+    return (t.type === 'depense' || t.categorie === 'epargne+' || t.categorie === 'deblock+') ? '-' : '+';
   }
 
   getOperationColor(t: Transaction): string {
-    return t.type === 'depense' ? 'danger' : 'success';
+    return (t.type === 'depense' || t.categorie === 'epargne+' || t.categorie === 'deblock+') ? 'danger' : 'success';
+  }
+
+  getOperationLabel(t: Transaction): string {
+    if (t.categorie === 'epargne+') return 'Transfert vers épargne';
+    if (t.categorie === 'deblock+') return 'Transfert vers Deblock';
+    return t.categorie;
   }
 
   getDescription(t: Transaction): string {
