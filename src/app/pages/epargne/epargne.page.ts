@@ -50,7 +50,7 @@ export class EpargnePage {
         (t.type === 'virement' && (t.categorie === 'epargne+' || t.categorie === 'epargne-')) ||
         (t.type === 'apport' && t.categorie === 'epargne-apport')
       )
-      .reverse();
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
   selectInput(event: any) {

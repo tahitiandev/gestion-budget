@@ -28,7 +28,8 @@ export class HomePage implements OnInit {
   async loadData() {
     this.loading = true;
     await this.budgetService.syncDone;
-    this.transactions = await this.budgetService.getTransactions();
+    this.transactions = (await this.budgetService.getTransactions())
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     this.calculerSoldes();
     this.loading = false;
   }

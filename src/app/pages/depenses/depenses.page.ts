@@ -36,7 +36,7 @@ export class DepensesPage {
 
   async loadDepenses() {
     const all = await this.budgetService.getTransactions();
-    this.depenses = all.filter(t => t.type === 'depense').reverse();
+    this.depenses = all.filter(t => t.type === 'depense').sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
   async addDepense() {

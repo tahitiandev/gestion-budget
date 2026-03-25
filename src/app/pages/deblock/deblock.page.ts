@@ -54,7 +54,7 @@ export class DeblockPage {
         (t.type === 'virement' && ['deblock+', 'deblock-courant', 'deblock-epargne', 'deblock-depense'].includes(t.categorie)) ||
         (t.type === 'apport' && t.categorie === 'deblock-apport')
       )
-      .reverse();
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
   selectInput(event: any) {

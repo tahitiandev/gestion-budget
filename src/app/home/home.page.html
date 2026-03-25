@@ -47,7 +47,7 @@
         <ion-label>Dernières transactions</ion-label>
       </ion-list-header>
 
-      <ion-item-sliding *ngFor="let t of transactions.slice().reverse()">
+      <ion-item-sliding *ngFor="let t of transactions">
         <ion-item>
           <ion-label>
             <h3>{{ getOperationLabel(t) }}</h3>

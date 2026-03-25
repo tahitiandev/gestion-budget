@@ -102,7 +102,7 @@ export class CourantPage {
         t.type === 'depense' ||
         (t.type === 'virement' && ['epargne+', 'epargne-', 'deblock+', 'deblock-courant'].includes(t.categorie))
       )
-      .reverse();
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
   selectInput(event: any) {

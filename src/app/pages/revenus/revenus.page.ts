@@ -36,7 +36,7 @@ export class RevenusPage {
 
   async loadRevenus() {
     const all = await this.budgetService.getTransactions();
-    this.revenus = all.filter(t => t.type === 'apport').reverse();
+    this.revenus = all.filter(t => t.type === 'apport').sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
   async addRevenu() {
