@@ -3,11 +3,31 @@ import { Storage } from '@ionic/storage-angular';
 import { db } from './firebase.service';
 import { AuthService } from './auth.service';
 import { BudgetService } from './budget.service';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface UserCategories {
   depense: string[];
   apport: string[];
 }
+
+export interface DefaultOperation {
+  type: 'apport' | 'depense';
+  categorieApport: string;
+  categorieDepense: string;
+}
+
+export interface FixedCharge {
+  id: string;
+  intitule: string;
+  montant: number;
+}
+
+const DEFAULT_FIXED_CHARGES: FixedCharge[] = [
+  { id: '1', intitule: 'Loyer', montant: 0 },
+  { id: '2', intitule: 'Électricité', montant: 0 },
+  { id: '3', intitule: 'Internet', montant: 0 },
+  { id: '4', intitule: 'Téléphone', montant: 0 },
+];
 
 const DEFAULT_CATEGORIES: UserCategories = {
   depense: ['course', 'loyer', 'transport', 'loisirs', 'autre', 'transfert-epargne', 'transfert-deblock'],
@@ -22,6 +42,9 @@ export const PROTECTED_CATEGORIES = ['transfert-epargne', 'transfert-deblock', '
 export class CategoriesService {
   private readonly COLLECTION = 'userCategories';
   private readonly STORAGE_KEY = 'userCategories';
+  private readonly DEFAULTS_KEY = 'defaultOperation';
+  private readonly FIXED_CHARGES_KEY = 'fixedCharges';
+  private readonly FIXED_CHARGES_COLLECTION = 'fixedCharges';
 
   constructor(private storage: Storage, private authService: AuthService, private budgetService: BudgetService) {
     this.init();
@@ -129,10 +152,78 @@ export class CategoriesService {
     }
   }
 
+  async getDefaultOperation(): Promise<DefaultOperation> {
+    const saved = await this.storage.get(this.DEFAULTS_KEY);
+    return saved || { type: 'depense', categorieApport: '', categorieDepense: '' };
+  }
+
+  async saveDefaultOperation(defaults: DefaultOperation) {
+    await this.storage.set(this.DEFAULTS_KEY, defaults);
+  }
+
   async removeCategory(type: 'depense' | 'apport', name: string) {
     if (PROTECTED_CATEGORIES.includes(name)) return;
     const categories = await this.getCategories();
     categories[type] = categories[type].filter(c => c !== name);
     await this.saveCategories(categories);
+  }
+
+  // ── Charges fixes ──
+
+  async getFixedCharges(): Promise<FixedCharge[]> {
+    const local = await this.storage.get(this.FIXED_CHARGES_KEY);
+    return local || [...DEFAULT_FIXED_CHARGES];
+  }
+
+  async saveFixedCharges(charges: FixedCharge[]) {
+    await this.storage.set(this.FIXED_CHARGES_KEY, charges);
+    const userId = this.authService.getUserId();
+    if (userId) {
+      try {
+        await db.collection(this.FIXED_CHARGES_COLLECTION).doc(userId).set({ charges });
+      } catch (e) {
+        console.warn('Firestore save fixed charges failed', e);
+      }
+    }
+  }
+
+  async addFixedCharge(intitule: string, montant: number) {
+    const charges = await this.getFixedCharges();
+    charges.push({ id: uuidv4(), intitule: intitule.trim(), montant });
+    await this.saveFixedCharges(charges);
+  }
+
+  async updateFixedCharge(id: string, changes: Partial<Pick<FixedCharge, 'intitule' | 'montant'>>) {
+    const charges = await this.getFixedCharges();
+    const index = charges.findIndex(c => c.id === id);
+    if (index === -1) return;
+    Object.assign(charges[index], changes);
+    await this.saveFixedCharges(charges);
+  }
+
+  async removeFixedCharge(id: string) {
+    const charges = await this.getFixedCharges();
+    const filtered = charges.filter(c => c.id !== id);
+    await this.saveFixedCharges(filtered);
+  }
+
+  async syncFixedChargesFromFirestore() {
+    try {
+      const userId = this.authService.getUserId();
+      if (!userId) return;
+
+      const doc = await db.collection(this.FIXED_CHARGES_COLLECTION).doc(userId).get();
+      if (doc.exists) {
+        const remote = doc.data() as { charges: FixedCharge[] };
+        await this.storage.set(this.FIXED_CHARGES_KEY, remote.charges);
+      } else {
+        const local = await this.storage.get(this.FIXED_CHARGES_KEY);
+        const toSave = local || [...DEFAULT_FIXED_CHARGES];
+        await this.storage.set(this.FIXED_CHARGES_KEY, toSave);
+        await db.collection(this.FIXED_CHARGES_COLLECTION).doc(userId).set({ charges: toSave });
+      }
+    } catch (e) {
+      console.warn('Sync fixed charges failed (offline?)', e);
+    }
   }
 }

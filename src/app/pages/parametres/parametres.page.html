@@ -22,6 +22,77 @@
     </ion-card-content>
   </ion-card>
 
+  <!-- Opération par défaut -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Opération par défaut</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Type</ion-label>
+        <ion-select [(ngModel)]="defaults.type" (ionChange)="saveDefaults()">
+          <ion-select-option value="apport">Apport</ion-select-option>
+          <ion-select-option value="depense">Dépense</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Catégorie dépense</ion-label>
+        <ion-select [(ngModel)]="defaults.categorieDepense" (ionChange)="saveDefaults()">
+          <ion-select-option value="">Aucune</ion-select-option>
+          <ion-select-option *ngFor="let cat of categories.depense" [value]="cat">{{ getCategoryLabel(cat) }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Catégorie apport</ion-label>
+        <ion-select [(ngModel)]="defaults.categorieApport" (ionChange)="saveDefaults()">
+          <ion-select-option value="">Aucune</ion-select-option>
+          <ion-select-option *ngFor="let cat of categories.apport" [value]="cat">{{ getCategoryLabel(cat) }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Charges fixes -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Charges fixes</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list *ngIf="fixedCharges.length > 0">
+        <ion-item *ngFor="let charge of fixedCharges">
+          <ion-icon name="wallet-outline" slot="start" color="warning"></ion-icon>
+          <ion-label>
+            <h3>{{ charge.intitule }}</h3>
+            <p>{{ charge.montant | currency:'XPF':'XPF ':'1.0-0' }}</p>
+          </ion-label>
+          <ion-button slot="end" fill="clear" color="medium" (click)="editFixedCharge(charge)">
+            <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+          </ion-button>
+          <ion-button slot="end" fill="clear" color="danger" (click)="removeFixedCharge(charge)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+
+      <ion-item *ngIf="fixedCharges.length === 0">
+        <ion-label class="ion-text-center"><p>Aucune charge fixe</p></ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Intitulé</ion-label>
+        <ion-input [(ngModel)]="newChargeIntitule" (keyup.enter)="addFixedCharge()"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Montant</ion-label>
+        <ion-input type="number" [(ngModel)]="newChargeMontant" (ionFocus)="selectInput($event)" (keyup.enter)="addFixedCharge()"></ion-input>
+      </ion-item>
+      <ion-button expand="full" size="small" class="ion-margin-top" (click)="addFixedCharge()" [disabled]="!newChargeIntitule.trim() || !newChargeMontant || newChargeMontant <= 0">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Ajouter
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
   <!-- Catégories de dépenses -->
   <ion-card>
     <ion-card-header>

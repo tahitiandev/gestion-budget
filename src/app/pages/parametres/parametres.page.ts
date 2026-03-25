@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AlertController } from '@ionic/angular';
-import { CategoriesService, UserCategories, PROTECTED_CATEGORIES } from '../../services/categories.service';
+import { CategoriesService, UserCategories, DefaultOperation, FixedCharge, PROTECTED_CATEGORIES } from '../../services/categories.service';
 import { ThemeService } from '../../services/theme.service';
 
 @Component({
@@ -14,6 +14,11 @@ export class ParametresPage {
   newDepense = '';
   newApport = '';
   darkMode = false;
+  defaults: DefaultOperation = { type: 'depense', categorieApport: '', categorieDepense: '' };
+
+  fixedCharges: FixedCharge[] = [];
+  newChargeIntitule = '';
+  newChargeMontant: number = 0;
 
   constructor(
     private categoriesService: CategoriesService,
@@ -24,10 +29,16 @@ export class ParametresPage {
   async ionViewWillEnter() {
     this.categories = await this.categoriesService.getCategories();
     this.darkMode = await this.themeService.isDarkMode();
+    this.defaults = await this.categoriesService.getDefaultOperation();
+    this.fixedCharges = await this.categoriesService.getFixedCharges();
   }
 
   async toggleDarkMode() {
     await this.themeService.setDarkMode(this.darkMode);
+  }
+
+  async saveDefaults() {
+    await this.categoriesService.saveDefaultOperation(this.defaults);
   }
 
   async addDepenseCategory() {
@@ -109,5 +120,63 @@ export class ParametresPage {
       ]
     });
     await alert.present();
+  }
+
+  // ── Charges fixes ──
+
+  async addFixedCharge() {
+    const intitule = this.newChargeIntitule.trim();
+    if (!intitule || !this.newChargeMontant || this.newChargeMontant <= 0) return;
+    await this.categoriesService.addFixedCharge(intitule, this.newChargeMontant);
+    this.fixedCharges = await this.categoriesService.getFixedCharges();
+    this.newChargeIntitule = '';
+    this.newChargeMontant = 0;
+  }
+
+  async editFixedCharge(charge: FixedCharge) {
+    const alert = await this.alertController.create({
+      header: 'Modifier la charge',
+      inputs: [
+        { name: 'intitule', type: 'text', value: charge.intitule, placeholder: 'Intitulé' },
+        { name: 'montant', type: 'number', value: charge.montant, placeholder: 'Montant' }
+      ],
+      buttons: [
+        { text: 'Annuler', role: 'cancel' },
+        {
+          text: 'Valider',
+          handler: async (data) => {
+            const intitule = data.intitule?.trim();
+            const montant = parseFloat(data.montant);
+            if (!intitule || !montant || montant <= 0) return;
+            await this.categoriesService.updateFixedCharge(charge.id, { intitule, montant });
+            this.fixedCharges = await this.categoriesService.getFixedCharges();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async removeFixedCharge(charge: FixedCharge) {
+    const alert = await this.alertController.create({
+      header: 'Supprimer',
+      message: `Supprimer la charge "${charge.intitule}" ?`,
+      buttons: [
+        { text: 'Annuler', role: 'cancel' },
+        {
+          text: 'Supprimer',
+          role: 'destructive',
+          handler: async () => {
+            await this.categoriesService.removeFixedCharge(charge.id);
+            this.fixedCharges = await this.categoriesService.getFixedCharges();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  selectInput(event: any) {
+    event.target.getInputElement().then((el: HTMLInputElement) => el.select());
   }
 }

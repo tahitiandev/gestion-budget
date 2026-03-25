@@ -23,6 +23,7 @@ export class AppComponent implements OnInit {
         this.budgetService.syncDone = this.budgetService.syncFromFirestore();
         this.coursesService.syncFromFirestore();
         this.categoriesService.syncFromFirestore();
+        this.categoriesService.syncFixedChargesFromFirestore();
       }
     });
   }

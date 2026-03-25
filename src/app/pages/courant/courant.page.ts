@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { BudgetService, Transaction } from '../../services/budget.service';
-import { CategoriesService } from '../../services/categories.service';
+import { CategoriesService, FixedCharge } from '../../services/categories.service';
 
 @Component({
   selector: 'app-courant',
@@ -21,6 +21,11 @@ export class CourantPage {
 
   categoriesApport: string[] = [];
   categoriesDepense: string[] = [];
+  fixedCharges: FixedCharge[] = [];
+
+  get isFixedCharges(): boolean {
+    return this.categorie === '__charges_fixes__';
+  }
 
   private readonly TRANSFER_LABELS: Record<string, string> = {
     'transfert-epargne': 'Transfert vers cpt épargne',
@@ -44,6 +49,7 @@ export class CourantPage {
     const cats = await this.categoriesService.getCategories();
     this.categoriesApport = cats.apport;
     this.categoriesDepense = cats.depense;
+    this.fixedCharges = await this.categoriesService.getFixedCharges();
     await this.loadData();
   }
 
@@ -54,10 +60,14 @@ export class CourantPage {
         label: this.TRANSFER_LABELS[c] || c
       }));
     }
-    return this.categoriesDepense.map(c => ({
+    const cats = this.categoriesDepense.map(c => ({
       value: c,
       label: this.TRANSFER_LABELS[c] || c
     }));
+    if (this.fixedCharges.length > 0) {
+      cats.unshift({ value: '__charges_fixes__', label: 'Ajouter les charges fixes' });
+    }
+    return cats;
   }
 
   private isTransfert(categorie: string): boolean {
@@ -100,6 +110,11 @@ export class CourantPage {
   }
 
   async addOperation() {
+    if (this.isFixedCharges) {
+      await this.addFixedChargesAsTransactions();
+      return;
+    }
+
     if (!this.montant || this.montant <= 0 || !this.categorie) return;
 
     let transaction: Omit<Transaction, 'id' | 'userId'>;
@@ -204,5 +219,22 @@ export class CourantPage {
       return `Course du ${jj}/${mm}/${aa}`;
     }
     return t.commentaire || '';
+  }
+
+  private async addFixedChargesAsTransactions() {
+    const now = new Date().toISOString();
+    for (const charge of this.fixedCharges) {
+      if (charge.montant > 0) {
+        await this.budgetService.addTransaction({
+          date: now,
+          type: 'depense',
+          categorie: 'charge-fixe',
+          montant: charge.montant,
+          commentaire: charge.intitule
+        });
+      }
+    }
+    this.categorie = '';
+    await this.loadData();
   }
 }
