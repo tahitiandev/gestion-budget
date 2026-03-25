@@ -29,9 +29,13 @@ const DEFAULT_FIXED_CHARGES: FixedCharge[] = [
   { id: '4', intitule: 'Téléphone', montant: 0 },
 ];
 
+const DEFAULT_FIXED_RESOURCES: FixedCharge[] = [
+  { id: '1', intitule: 'Salaire', montant: 0 },
+];
+
 const DEFAULT_CATEGORIES: UserCategories = {
   depense: ['course', 'loyer', 'transport', 'loisirs', 'autre', 'transfert-epargne', 'transfert-deblock'],
-  apport: ['salaire', 'prime', 'remboursement', 'divers', 'transfert-epargne-cc', 'transfert-deblock-cc']
+  apport: ['prime', 'remboursement', 'divers', 'transfert-epargne-cc', 'transfert-deblock-cc']
 };
 
 export const PROTECTED_CATEGORIES = ['transfert-epargne', 'transfert-deblock', 'transfert-epargne-cc', 'transfert-deblock-cc'];
@@ -45,6 +49,8 @@ export class CategoriesService {
   private readonly DEFAULTS_KEY = 'defaultOperation';
   private readonly FIXED_CHARGES_KEY = 'fixedCharges';
   private readonly FIXED_CHARGES_COLLECTION = 'fixedCharges';
+  private readonly FIXED_RESOURCES_KEY = 'fixedResources';
+  private readonly FIXED_RESOURCES_COLLECTION = 'fixedResources';
 
   constructor(private storage: Storage, private authService: AuthService, private budgetService: BudgetService) {
     this.init();
@@ -224,6 +230,65 @@ export class CategoriesService {
       }
     } catch (e) {
       console.warn('Sync fixed charges failed (offline?)', e);
+    }
+  }
+
+  // ── Ressources fixes ──
+
+  async getFixedResources(): Promise<FixedCharge[]> {
+    const local = await this.storage.get(this.FIXED_RESOURCES_KEY);
+    return local || [...DEFAULT_FIXED_RESOURCES];
+  }
+
+  async saveFixedResources(resources: FixedCharge[]) {
+    await this.storage.set(this.FIXED_RESOURCES_KEY, resources);
+    const userId = this.authService.getUserId();
+    if (userId) {
+      try {
+        await db.collection(this.FIXED_RESOURCES_COLLECTION).doc(userId).set({ resources });
+      } catch (e) {
+        console.warn('Firestore save fixed resources failed', e);
+      }
+    }
+  }
+
+  async addFixedResource(intitule: string, montant: number) {
+    const resources = await this.getFixedResources();
+    resources.push({ id: uuidv4(), intitule: intitule.trim(), montant });
+    await this.saveFixedResources(resources);
+  }
+
+  async updateFixedResource(id: string, changes: Partial<Pick<FixedCharge, 'intitule' | 'montant'>>) {
+    const resources = await this.getFixedResources();
+    const index = resources.findIndex(r => r.id === id);
+    if (index === -1) return;
+    Object.assign(resources[index], changes);
+    await this.saveFixedResources(resources);
+  }
+
+  async removeFixedResource(id: string) {
+    const resources = await this.getFixedResources();
+    const filtered = resources.filter(r => r.id !== id);
+    await this.saveFixedResources(filtered);
+  }
+
+  async syncFixedResourcesFromFirestore() {
+    try {
+      const userId = this.authService.getUserId();
+      if (!userId) return;
+
+      const doc = await db.collection(this.FIXED_RESOURCES_COLLECTION).doc(userId).get();
+      if (doc.exists) {
+        const remote = doc.data() as { resources: FixedCharge[] };
+        await this.storage.set(this.FIXED_RESOURCES_KEY, remote.resources);
+      } else {
+        const local = await this.storage.get(this.FIXED_RESOURCES_KEY);
+        const toSave = local || [...DEFAULT_FIXED_RESOURCES];
+        await this.storage.set(this.FIXED_RESOURCES_KEY, toSave);
+        await db.collection(this.FIXED_RESOURCES_COLLECTION).doc(userId).set({ resources: toSave });
+      }
+    } catch (e) {
+      console.warn('Sync fixed resources failed (offline?)', e);
     }
   }
 }

@@ -39,23 +39,28 @@
         </ion-select>
       </ion-item>
 
-      <ion-item *ngIf="!isFixedCharges">
+      <ion-item *ngIf="!isFixedOperation">
         <ion-label position="floating">Montant</ion-label>
         <ion-input type="number" [(ngModel)]="montant" (ionFocus)="selectInput($event)"></ion-input>
       </ion-item>
 
-      <ion-item *ngIf="!isFixedCharges">
+      <ion-item *ngIf="!isFixedOperation">
         <ion-label position="floating">Commentaire (facultatif)</ion-label>
         <ion-input [(ngModel)]="commentaire"></ion-input>
       </ion-item>
 
-      <ion-button *ngIf="!isFixedCharges" expand="full" class="ion-margin-top" (click)="addOperation()" [disabled]="!montant || montant <= 0 || !categorie">
+      <ion-button *ngIf="!isFixedOperation" expand="full" class="ion-margin-top" (click)="addOperation()" [disabled]="!montant || montant <= 0 || !categorie">
         Enregistrer
       </ion-button>
 
       <ion-button *ngIf="isFixedCharges" expand="full" class="ion-margin-top" (click)="addOperation()" color="warning">
         <ion-icon name="wallet-outline" slot="start"></ion-icon>
         Enregistrer les charges fixes
+      </ion-button>
+
+      <ion-button *ngIf="isFixedResources" expand="full" class="ion-margin-top" (click)="addOperation()" color="success">
+        <ion-icon name="cash-outline" slot="start"></ion-icon>
+        Enregistrer les ressources fixes
       </ion-button>
     </ion-card-content>
   </ion-card>

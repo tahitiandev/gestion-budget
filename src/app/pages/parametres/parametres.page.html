@@ -93,6 +93,47 @@
     </ion-card-content>
   </ion-card>
 
+  <!-- Ressources fixes -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Ressources fixes</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list *ngIf="fixedResources.length > 0">
+        <ion-item *ngFor="let resource of fixedResources">
+          <ion-icon name="cash-outline" slot="start" color="success"></ion-icon>
+          <ion-label>
+            <h3>{{ resource.intitule }}</h3>
+            <p>{{ resource.montant | currency:'XPF':'XPF ':'1.0-0' }}</p>
+          </ion-label>
+          <ion-button slot="end" fill="clear" color="medium" (click)="editFixedResource(resource)">
+            <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+          </ion-button>
+          <ion-button slot="end" fill="clear" color="danger" (click)="removeFixedResource(resource)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+
+      <ion-item *ngIf="fixedResources.length === 0">
+        <ion-label class="ion-text-center"><p>Aucune ressource fixe</p></ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Intitulé</ion-label>
+        <ion-input [(ngModel)]="newResourceIntitule" (keyup.enter)="addFixedResource()"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Montant</ion-label>
+        <ion-input type="number" [(ngModel)]="newResourceMontant" (ionFocus)="selectInput($event)" (keyup.enter)="addFixedResource()"></ion-input>
+      </ion-item>
+      <ion-button expand="full" size="small" class="ion-margin-top" (click)="addFixedResource()" [disabled]="!newResourceIntitule.trim() || !newResourceMontant || newResourceMontant <= 0">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Ajouter
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
   <!-- Catégories de dépenses -->
   <ion-card>
     <ion-card-header>

@@ -79,6 +79,7 @@ export class HomePage implements OnInit {
 
   getOperationLabel(t: Transaction): string {
     if (t.categorie === 'charge-fixe') return 'Charge fixe';
+    if (t.categorie === 'ressource-fixe') return 'Ressource fixe';
     return t.categorie.charAt(0).toUpperCase() + t.categorie.slice(1);
   }
 

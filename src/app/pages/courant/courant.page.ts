@@ -22,9 +22,18 @@ export class CourantPage {
   categoriesApport: string[] = [];
   categoriesDepense: string[] = [];
   fixedCharges: FixedCharge[] = [];
+  fixedResources: FixedCharge[] = [];
 
   get isFixedCharges(): boolean {
     return this.categorie === '__charges_fixes__';
+  }
+
+  get isFixedResources(): boolean {
+    return this.categorie === '__ressources_fixes__';
+  }
+
+  get isFixedOperation(): boolean {
+    return this.isFixedCharges || this.isFixedResources;
   }
 
   private readonly TRANSFER_LABELS: Record<string, string> = {
@@ -50,15 +59,20 @@ export class CourantPage {
     this.categoriesApport = cats.apport;
     this.categoriesDepense = cats.depense;
     this.fixedCharges = await this.categoriesService.getFixedCharges();
+    this.fixedResources = await this.categoriesService.getFixedResources();
     await this.loadData();
   }
 
   get categories(): { value: string; label: string }[] {
     if (this.operationType === 'apport') {
-      return this.categoriesApport.map(c => ({
+      const cats = this.categoriesApport.map(c => ({
         value: c,
         label: this.TRANSFER_LABELS[c] || c
       }));
+      if (this.fixedResources.length > 0) {
+        cats.unshift({ value: '__ressources_fixes__', label: 'Ajouter les ressources fixes' });
+      }
+      return cats;
     }
     const cats = this.categoriesDepense.map(c => ({
       value: c,
@@ -112,6 +126,10 @@ export class CourantPage {
   async addOperation() {
     if (this.isFixedCharges) {
       await this.addFixedChargesAsTransactions();
+      return;
+    }
+    if (this.isFixedResources) {
+      await this.addFixedResourcesAsTransactions();
       return;
     }
 
@@ -208,6 +226,7 @@ export class CourantPage {
     if (t.categorie === 'deblock+') return 'Transfert vers Deblock';
     if (t.categorie === 'deblock-courant') return 'Transfert Deblock vers cc';
     if (t.categorie === 'charge-fixe') return 'Charge fixe';
+    if (t.categorie === 'ressource-fixe') return 'Ressource fixe';
     return t.categorie.charAt(0).toUpperCase() + t.categorie.slice(1);
   }
 
@@ -232,6 +251,23 @@ export class CourantPage {
           categorie: 'charge-fixe',
           montant: charge.montant,
           commentaire: charge.intitule
+        });
+      }
+    }
+    this.categorie = '';
+    await this.loadData();
+  }
+
+  private async addFixedResourcesAsTransactions() {
+    const now = new Date().toISOString();
+    for (const resource of this.fixedResources) {
+      if (resource.montant > 0) {
+        await this.budgetService.addTransaction({
+          date: now,
+          type: 'apport',
+          categorie: 'ressource-fixe',
+          montant: resource.montant,
+          commentaire: resource.intitule
         });
       }
     }

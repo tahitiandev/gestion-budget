@@ -20,6 +20,10 @@ export class ParametresPage {
   newChargeIntitule = '';
   newChargeMontant: number = 0;
 
+  fixedResources: FixedCharge[] = [];
+  newResourceIntitule = '';
+  newResourceMontant: number = 0;
+
   constructor(
     private categoriesService: CategoriesService,
     private alertController: AlertController,
@@ -31,6 +35,7 @@ export class ParametresPage {
     this.darkMode = await this.themeService.isDarkMode();
     this.defaults = await this.categoriesService.getDefaultOperation();
     this.fixedCharges = await this.categoriesService.getFixedCharges();
+    this.fixedResources = await this.categoriesService.getFixedResources();
   }
 
   async toggleDarkMode() {
@@ -178,5 +183,59 @@ export class ParametresPage {
 
   selectInput(event: any) {
     event.target.getInputElement().then((el: HTMLInputElement) => el.select());
+  }
+
+  // ── Ressources fixes ──
+
+  async addFixedResource() {
+    const intitule = this.newResourceIntitule.trim();
+    if (!intitule || !this.newResourceMontant || this.newResourceMontant <= 0) return;
+    await this.categoriesService.addFixedResource(intitule, this.newResourceMontant);
+    this.fixedResources = await this.categoriesService.getFixedResources();
+    this.newResourceIntitule = '';
+    this.newResourceMontant = 0;
+  }
+
+  async editFixedResource(resource: FixedCharge) {
+    const alert = await this.alertController.create({
+      header: 'Modifier la ressource',
+      inputs: [
+        { name: 'intitule', type: 'text', value: resource.intitule, placeholder: 'Intitulé' },
+        { name: 'montant', type: 'number', value: resource.montant, placeholder: 'Montant' }
+      ],
+      buttons: [
+        { text: 'Annuler', role: 'cancel' },
+        {
+          text: 'Valider',
+          handler: async (data) => {
+            const intitule = data.intitule?.trim();
+            const montant = parseFloat(data.montant);
+            if (!intitule || !montant || montant <= 0) return;
+            await this.categoriesService.updateFixedResource(resource.id, { intitule, montant });
+            this.fixedResources = await this.categoriesService.getFixedResources();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async removeFixedResource(resource: FixedCharge) {
+    const alert = await this.alertController.create({
+      header: 'Supprimer',
+      message: `Supprimer la ressource "${resource.intitule}" ?`,
+      buttons: [
+        { text: 'Annuler', role: 'cancel' },
+        {
+          text: 'Supprimer',
+          role: 'destructive',
+          handler: async () => {
+            await this.categoriesService.removeFixedResource(resource.id);
+            this.fixedResources = await this.categoriesService.getFixedResources();
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 }
