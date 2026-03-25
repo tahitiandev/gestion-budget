@@ -50,7 +50,7 @@
       <ion-item-sliding *ngFor="let t of transactions.slice().reverse()">
         <ion-item>
           <ion-label>
-            <h3>{{ t.categorie }}</h3>
+            <h3>{{ getOperationLabel(t) }}</h3>
             <p>{{ t.date | date:'shortDate' }} - {{ getDescription(t) }}</p>
           </ion-label>
           <ion-note slot="end" [color]="t.type === 'depense' ? 'danger' : 'success'" (click)="editMontant(t)" style="cursor: pointer;">

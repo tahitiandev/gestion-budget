@@ -207,7 +207,8 @@ export class CourantPage {
     if (t.categorie === 'epargne-') return 'Transfert épargne vers cc';
     if (t.categorie === 'deblock+') return 'Transfert vers Deblock';
     if (t.categorie === 'deblock-courant') return 'Transfert Deblock vers cc';
-    return t.categorie;
+    if (t.categorie === 'charge-fixe') return 'Charge fixe';
+    return t.categorie.charAt(0).toUpperCase() + t.categorie.slice(1);
   }
 
   getDescription(t: Transaction): string {

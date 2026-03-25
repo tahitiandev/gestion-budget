@@ -76,6 +76,11 @@ export class HomePage implements OnInit {
     this.soldeDeblock = deblock;
   }
 
+  getOperationLabel(t: Transaction): string {
+    if (t.categorie === 'charge-fixe') return 'Charge fixe';
+    return t.categorie.charAt(0).toUpperCase() + t.categorie.slice(1);
+  }
+
   getDescription(t: Transaction): string {
     if (t.categorie === 'course') {
       const d = new Date(t.date);

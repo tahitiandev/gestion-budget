@@ -124,7 +124,7 @@ export class EpargnePage {
     if (t.categorie === 'epargne+') return 'Courant → Épargne';
     if (t.categorie === 'epargne-') return 'Épargne → Courant';
     if (t.categorie === 'epargne-apport') return 'Entrée directe';
-    return t.categorie;
+    return t.categorie.charAt(0).toUpperCase() + t.categorie.slice(1);
   }
 
   getOperationSign(t: Transaction): string {

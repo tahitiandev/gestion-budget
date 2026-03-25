@@ -147,7 +147,7 @@ export class DeblockPage {
     if (t.categorie === 'deblock-epargne') return 'Épargne → Deblock';
     if (t.categorie === 'deblock-apport') return 'Apport direct';
     if (t.categorie === 'deblock-depense') return 'Dépense';
-    return t.categorie;
+    return t.categorie.charAt(0).toUpperCase() + t.categorie.slice(1);
   }
 
   getOperationSign(t: Transaction): string {
