@@ -1,7 +1,262 @@
-ion-card-title {
-  font-size: 1.2rem;
+// ===== Mobile: identique à avant =====
+.mobile-only {
+  display: block;
+
+  ion-card-title {
+    font-size: 1.2rem;
+  }
+
+  h2 {
+    margin: 0;
+  }
 }
 
-h2 {
+// ===== Desktop: masqué sur mobile =====
+.desktop-only {
+  display: none;
+}
+
+// ===== Breakpoint desktop =====
+@media (min-width: 992px) {
+  .mobile-only {
+    display: none;
+  }
+
+  .desktop-only {
+    display: block;
+  }
+}
+
+// ===== Desktop Dashboard Styles =====
+
+// Patrimoine total
+.patrimoine-card {
+  background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-primary-shade));
+  border-radius: 16px;
+  padding: 24px 32px;
+  margin-bottom: 20px;
+  color: #fff;
+
+  .patrimoine-inner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    ion-icon {
+      font-size: 40px;
+      opacity: 0.85;
+    }
+
+    .patrimoine-label {
+      display: block;
+      font-size: 0.9rem;
+      opacity: 0.85;
+      margin-bottom: 4px;
+    }
+
+    .patrimoine-montant {
+      display: block;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+  }
+}
+
+// 3 cartes de solde
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.solde-card {
   margin: 0;
+  border-radius: 12px;
+
+  .solde-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+
+    ion-icon {
+      font-size: 22px;
+    }
+
+    span {
+      font-size: 0.95rem;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+  }
+
+  .solde-montant {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+}
+
+.solde-courant .solde-header ion-icon { color: var(--ion-color-primary); }
+.solde-epargne .solde-header ion-icon { color: var(--ion-color-success); }
+.solde-deblock .solde-header ion-icon { color: var(--ion-color-warning); }
+
+// Dashboard row (2 colonnes)
+.dashboard-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.dashboard-card {
+  margin: 0;
+  border-radius: 12px;
+
+  ion-card-title {
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    ion-icon {
+      font-size: 20px;
+      color: var(--ion-color-primary);
+    }
+  }
+
+  ion-card-subtitle {
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
+}
+
+// Résumé du mois
+.resume-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.resume-label {
+  font-size: 0.9rem;
+  color: var(--ion-text-color);
+  opacity: 0.7;
+
+  &.bold {
+    opacity: 1;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+}
+
+.resume-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  &.success { color: var(--ion-color-success); }
+  &.danger { color: var(--ion-color-danger); }
+  &.bold { font-size: 1.05rem; }
+}
+
+.resume-bar {
+  height: 8px;
+  background: var(--ion-color-light, #f0f0f0);
+  border-radius: 4px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.resume-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+
+  &.success { background: var(--ion-color-success); }
+  &.danger { background: var(--ion-color-danger); }
+}
+
+.resume-divider {
+  height: 1px;
+  background: var(--ion-color-light-shade, #d7d8da);
+  margin: 12px 0;
+}
+
+// Charts
+.chart-container {
+  position: relative;
+  height: 220px;
+  margin-top: 20px;
+}
+
+.chart-doughnut {
+  height: 200px;
+  margin-top: 8px;
+}
+
+// Category legend
+.category-legend {
+  margin-top: 16px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--ion-color-light, #f0f0f0);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-label {
+  flex: 1;
+  font-size: 0.85rem;
+}
+
+.legend-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ion-color-danger);
+}
+
+// Transactions card
+.transactions-card {
+  ion-card-content.no-padding {
+    padding: 0;
+  }
+}
+
+.tx-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  ion-icon {
+    font-size: 18px;
+    color: #fff;
+  }
+
+  &.tx-depense {
+    background: var(--ion-color-danger);
+  }
+
+  &.tx-apport {
+    background: var(--ion-color-success);
+  }
 }

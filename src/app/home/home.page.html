@@ -15,58 +15,208 @@
   </div>
 
   <ng-container *ngIf="!loading">
-    <div class="desktop-container">
-      <div class="cards-grid">
-        <ion-card button routerLink="/courant" [queryParams]="{from: 'home'}">
-          <ion-card-header>
-            <ion-card-title>Solde courant</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <h2>{{ soldeTotal | currency:'XPF':'XPF ':'1.0-0' }}</h2>
-          </ion-card-content>
-        </ion-card>
 
-        <ion-card button routerLink="/epargne" [queryParams]="{from: 'home'}">
-          <ion-card-header>
-            <ion-card-title>Épargne</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <h2>{{ soldeEpargne | currency:'XPF':'XPF ':'1.0-0' }}</h2>
-          </ion-card-content>
-        </ion-card>
+    <!-- ==================== MOBILE (inchangé) ==================== -->
+    <div class="mobile-only">
+      <ion-card button routerLink="/courant" [queryParams]="{from: 'home'}">
+        <ion-card-header>
+          <ion-card-title>Solde courant</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <h2>{{ soldeTotal | currency:'XPF':'XPF ':'1.0-0' }}</h2>
+        </ion-card-content>
+      </ion-card>
 
-        <ion-card button routerLink="/deblock" [queryParams]="{from: 'home'}">
-          <ion-card-header>
-            <ion-card-title>Deblock</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <h2>{{ soldeDeblock | currency:'XPF':'XPF ':'1.0-0' }}</h2>
-          </ion-card-content>
-        </ion-card>
-      </div>
+      <ion-card button routerLink="/epargne" [queryParams]="{from: 'home'}">
+        <ion-card-header>
+          <ion-card-title>Épargne</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <h2>{{ soldeEpargne | currency:'XPF':'XPF ':'1.0-0' }}</h2>
+        </ion-card-content>
+      </ion-card>
 
-    <ion-list>
-      <ion-list-header>
-        <ion-label>Dernières transactions</ion-label>
-      </ion-list-header>
+      <ion-card button routerLink="/deblock" [queryParams]="{from: 'home'}">
+        <ion-card-header>
+          <ion-card-title>Deblock</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <h2>{{ soldeDeblock | currency:'XPF':'XPF ':'1.0-0' }}</h2>
+        </ion-card-content>
+      </ion-card>
 
-      <ion-item-sliding *ngFor="let t of transactions">
-        <ion-item>
-          <ion-label>
-            <h3>{{ getOperationLabel(t) }}</h3>
-            <p>{{ t.date | date:'shortDate' }} - {{ getDescription(t) }}</p>
-          </ion-label>
-          <ion-note slot="end" [color]="t.type === 'depense' ? 'danger' : 'success'" (click)="editMontant(t)" style="cursor: pointer;">
-            {{ t.type === 'depense' ? '-' : '+' }}{{ t.montant | currency:'XPF':'XPF ':'1.0-0' }}
-          </ion-note>
-        </ion-item>
-        <ion-item-options side="end">
-          <ion-item-option color="danger" (click)="deleteTransaction(t.id)">
-            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
+      <ion-list>
+        <ion-list-header>
+          <ion-label>Dernières transactions</ion-label>
+        </ion-list-header>
+
+        <ion-item-sliding *ngFor="let t of transactions">
+          <ion-item>
+            <ion-label>
+              <h3>{{ getOperationLabel(t) }}</h3>
+              <p>{{ t.date | date:'shortDate' }} - {{ getDescription(t) }}</p>
+            </ion-label>
+            <ion-note slot="end" [color]="t.type === 'depense' ? 'danger' : 'success'" (click)="editMontant(t)" style="cursor: pointer;">
+              {{ t.type === 'depense' ? '-' : '+' }}{{ t.montant | currency:'XPF':'XPF ':'1.0-0' }}
+            </ion-note>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="deleteTransaction(t.id)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
     </div>
+
+    <!-- ==================== DESKTOP (nouveau dashboard) ==================== -->
+    <div class="desktop-only">
+      <div class="desktop-container">
+
+        <!-- Patrimoine total -->
+        <div class="patrimoine-card">
+          <div class="patrimoine-inner">
+            <ion-icon name="diamond-outline"></ion-icon>
+            <div>
+              <span class="patrimoine-label">Patrimoine total</span>
+              <span class="patrimoine-montant">{{ patrimoineTotal | currency:'XPF':'XPF ':'1.0-0' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 cartes de solde -->
+        <div class="cards-grid">
+          <ion-card button routerLink="/courant" [queryParams]="{from: 'home'}" class="solde-card solde-courant">
+            <ion-card-content>
+              <div class="solde-header">
+                <ion-icon name="wallet-outline"></ion-icon>
+                <span>Courant</span>
+              </div>
+              <div class="solde-montant">{{ soldeTotal | currency:'XPF':'XPF ':'1.0-0' }}</div>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card button routerLink="/epargne" [queryParams]="{from: 'home'}" class="solde-card solde-epargne">
+            <ion-card-content>
+              <div class="solde-header">
+                <ion-icon name="save-outline"></ion-icon>
+                <span>Épargne</span>
+              </div>
+              <div class="solde-montant">{{ soldeEpargne | currency:'XPF':'XPF ':'1.0-0' }}</div>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card button routerLink="/deblock" [queryParams]="{from: 'home'}" class="solde-card solde-deblock">
+            <ion-card-content>
+              <div class="solde-header">
+                <ion-icon name="lock-open-outline"></ion-icon>
+                <span>Deblock</span>
+              </div>
+              <div class="solde-montant">{{ soldeDeblock | currency:'XPF':'XPF ':'1.0-0' }}</div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <!-- Résumé du mois + Graphique dépenses -->
+        <div class="dashboard-row">
+          <!-- Résumé du mois -->
+          <ion-card class="dashboard-card">
+            <ion-card-header>
+              <ion-card-title>
+                <ion-icon name="calendar-outline"></ion-icon>
+                Résumé du mois
+              </ion-card-title>
+              <ion-card-subtitle>{{ currentMonthLabel }}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="resume-row">
+                <span class="resume-label">Revenus</span>
+                <span class="resume-value success">+{{ monthRevenus | currency:'XPF':'XPF ':'1.0-0' }}</span>
+              </div>
+              <div class="resume-bar">
+                <div class="resume-bar-fill success" [style.width.%]="revenusPercent"></div>
+              </div>
+              <div class="resume-row">
+                <span class="resume-label">Dépenses</span>
+                <span class="resume-value danger">-{{ monthDepenses | currency:'XPF':'XPF ':'1.0-0' }}</span>
+              </div>
+              <div class="resume-bar">
+                <div class="resume-bar-fill danger" [style.width.%]="depensesPercent"></div>
+              </div>
+              <div class="resume-divider"></div>
+              <div class="resume-row">
+                <span class="resume-label bold">Solde du mois</span>
+                <span class="resume-value bold" [class.success]="monthBalance >= 0" [class.danger]="monthBalance < 0">
+                  {{ monthBalance | currency:'XPF':'XPF ':'1.0-0' }}
+                </span>
+              </div>
+
+              <!-- Mini bar chart revenus vs depenses sur 6 mois -->
+              <div class="chart-container">
+                <canvas #barChart></canvas>
+              </div>
+            </ion-card-content>
+          </ion-card>
+
+          <!-- Répartition des dépenses -->
+          <ion-card class="dashboard-card">
+            <ion-card-header>
+              <ion-card-title>
+                <ion-icon name="pie-chart-outline"></ion-icon>
+                Dépenses par catégorie
+              </ion-card-title>
+              <ion-card-subtitle>{{ currentMonthLabel }}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="chart-container chart-doughnut">
+                <canvas #doughnutChart></canvas>
+              </div>
+              <div class="category-legend" *ngIf="categoryData.length > 0">
+                <div class="legend-item" *ngFor="let cat of categoryData">
+                  <span class="legend-dot" [style.background]="cat.color"></span>
+                  <span class="legend-label">{{ cat.label }}</span>
+                  <span class="legend-value">{{ cat.montant | currency:'XPF':'XPF ':'1.0-0' }}</span>
+                </div>
+              </div>
+              <div *ngIf="categoryData.length === 0" class="ion-text-center">
+                <p>Aucune dépense ce mois</p>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <!-- Dernières transactions -->
+        <ion-card class="dashboard-card transactions-card">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-icon name="list-outline"></ion-icon>
+              Dernières transactions
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="no-padding">
+            <ion-list lines="full">
+              <ion-item *ngFor="let t of recentTransactions">
+                <div class="tx-icon" slot="start" [class.tx-depense]="t.type === 'depense'" [class.tx-apport]="t.type !== 'depense'">
+                  <ion-icon [name]="t.type === 'depense' ? 'arrow-down-outline' : 'arrow-up-outline'"></ion-icon>
+                </div>
+                <ion-label>
+                  <h3>{{ getOperationLabel(t) }}</h3>
+                  <p>{{ t.date | date:'dd/MM/yyyy' }} - {{ getDescription(t) }}</p>
+                </ion-label>
+                <ion-note slot="end" [color]="t.type === 'depense' ? 'danger' : 'success'" (click)="editMontant(t)" style="cursor: pointer; font-weight: 600;">
+                  {{ t.type === 'depense' ? '-' : '+' }}{{ t.montant | currency:'XPF':'XPF ':'1.0-0' }}
+                </ion-note>
+              </ion-item>
+
+              <ion-item *ngIf="recentTransactions.length === 0">
+                <ion-label class="ion-text-center"><p>Aucune transaction</p></ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+
+      </div>
+    </div>
+
   </ng-container>
 </ion-content>
