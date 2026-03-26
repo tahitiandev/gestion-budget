@@ -35,3 +35,77 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 @import "@ionic/angular/css/palettes/dark.class.css";
 /* @import "@ionic/angular/css/palettes/dark.system.css"; */
+
+/* ===== Responsive / Desktop Adaptation ===== */
+
+// Contenu principal centré avec max-width sur desktop
+@media (min-width: 992px) {
+  ion-content.ion-padding {
+    --padding-start: 24px;
+    --padding-end: 24px;
+  }
+
+  .desktop-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1200px) {
+  .desktop-container {
+    max-width: 1100px;
+  }
+}
+
+// Grille pour les cartes sur desktop
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  @media (min-width: 992px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+}
+
+// Layout 2 colonnes pour formulaire + historique
+.desktop-two-col {
+  display: block;
+
+  @media (min-width: 992px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+}
+
+// Centrer les formulaires auth sur desktop
+.auth-container {
+  @media (min-width: 768px) {
+    max-width: 450px;
+    margin: 40px auto 0;
+  }
+}
+
+// Grille pour les cartes settings sur desktop
+.settings-grid {
+  display: block;
+
+  @media (min-width: 992px) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    align-items: start;
+
+    > ion-card {
+      margin: 0 0 12px;
+    }
+  }
+}

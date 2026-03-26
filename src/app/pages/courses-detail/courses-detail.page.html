@@ -8,6 +8,7 @@
 </ion-header>
 
 <ion-content class="ion-padding" *ngIf="list">
+  <div class="desktop-container">
   <!-- Statut -->
   <ion-chip [color]="list.validated ? (list.selfPaid ? 'success' : 'tertiary') : 'warning'">
     <ion-icon [name]="list.validated ? 'checkmark-circle' : 'time-outline'"></ion-icon>
@@ -105,4 +106,5 @@
       </ion-button>
     </ng-container>
   </ng-container>
+  </div>
 </ion-content>

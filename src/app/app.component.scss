@@ -8,3 +8,10 @@ ion-item.selected {
   background: var(--ion-color-light-shade, #d7d8da);
   margin: 8px 16px;
 }
+
+// Desktop: sidebar permanent styling
+ion-split-pane {
+  --side-width: 270px;
+  --side-max-width: 300px;
+  --border: 1px solid var(--ion-color-light-shade, #d7d8da);
+}

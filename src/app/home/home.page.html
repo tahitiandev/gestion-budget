@@ -15,32 +15,35 @@
   </div>
 
   <ng-container *ngIf="!loading">
-    <ion-card button routerLink="/courant" [queryParams]="{from: 'home'}">
-      <ion-card-header>
-        <ion-card-title>Solde courant</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <h2>{{ soldeTotal | currency:'XPF':'XPF ':'1.0-0' }}</h2>
-      </ion-card-content>
-    </ion-card>
+    <div class="desktop-container">
+      <div class="cards-grid">
+        <ion-card button routerLink="/courant" [queryParams]="{from: 'home'}">
+          <ion-card-header>
+            <ion-card-title>Solde courant</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <h2>{{ soldeTotal | currency:'XPF':'XPF ':'1.0-0' }}</h2>
+          </ion-card-content>
+        </ion-card>
 
-    <ion-card button routerLink="/epargne" [queryParams]="{from: 'home'}">
-      <ion-card-header>
-        <ion-card-title>Épargne</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <h2>{{ soldeEpargne | currency:'XPF':'XPF ':'1.0-0' }}</h2>
-      </ion-card-content>
-    </ion-card>
+        <ion-card button routerLink="/epargne" [queryParams]="{from: 'home'}">
+          <ion-card-header>
+            <ion-card-title>Épargne</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <h2>{{ soldeEpargne | currency:'XPF':'XPF ':'1.0-0' }}</h2>
+          </ion-card-content>
+        </ion-card>
 
-    <ion-card button routerLink="/deblock" [queryParams]="{from: 'home'}">
-      <ion-card-header>
-        <ion-card-title>Deblock</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <h2>{{ soldeDeblock | currency:'XPF':'XPF ':'1.0-0' }}</h2>
-      </ion-card-content>
-    </ion-card>
+        <ion-card button routerLink="/deblock" [queryParams]="{from: 'home'}">
+          <ion-card-header>
+            <ion-card-title>Deblock</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <h2>{{ soldeDeblock | currency:'XPF':'XPF ':'1.0-0' }}</h2>
+          </ion-card-content>
+        </ion-card>
+      </div>
 
     <ion-list>
       <ion-list-header>
@@ -64,5 +67,6 @@
         </ion-item-options>
       </ion-item-sliding>
     </ion-list>
+    </div>
   </ng-container>
 </ion-content>

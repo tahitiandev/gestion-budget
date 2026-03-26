@@ -1,72 +1,78 @@
 <ion-app>
-  <ion-menu contentId="main-content" *ngIf="userEmail">
-    <ion-header>
-      <ion-toolbar color="primary">
-        <ion-title>Menu</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
-      <ion-item lines="none">
-        <ion-icon name="person-circle-outline" slot="start"></ion-icon>
-        <ion-label>{{ userEmail }}</ion-label>
-      </ion-item>
+  <ion-split-pane contentId="main-content" when="lg" *ngIf="userEmail; else noMenu">
+    <ion-menu contentId="main-content">
+      <ion-header>
+        <ion-toolbar color="primary">
+          <ion-title>Menu</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-item lines="none">
+          <ion-icon name="person-circle-outline" slot="start"></ion-icon>
+          <ion-label>{{ userEmail }}</ion-label>
+        </ion-item>
 
-      <ion-list lines="none">
-        <ion-menu-toggle auto-hide="false">
-          <ion-item routerLink="/home" routerLinkActive="selected" routerDirection="root">
-            <ion-icon name="home-outline" slot="start"></ion-icon>
-            <ion-label>Accueil</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-        <ion-menu-toggle auto-hide="false">
-          <ion-item routerLink="/courant" routerLinkActive="selected" routerDirection="root">
-            <ion-icon name="wallet-outline" slot="start"></ion-icon>
-            <ion-label>Courant</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-        <ion-menu-toggle auto-hide="false">
-          <ion-item routerLink="/epargne" routerLinkActive="selected" routerDirection="root">
-            <ion-icon name="save-outline" slot="start"></ion-icon>
-            <ion-label>Épargne</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-        <ion-menu-toggle auto-hide="false">
-          <ion-item routerLink="/deblock" routerLinkActive="selected" routerDirection="root">
-            <ion-icon name="lock-open-outline" slot="start"></ion-icon>
-            <ion-label>Deblock</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-      </ion-list>
+        <ion-list lines="none">
+          <ion-menu-toggle auto-hide="false">
+            <ion-item routerLink="/home" routerLinkActive="selected" routerDirection="root">
+              <ion-icon name="home-outline" slot="start"></ion-icon>
+              <ion-label>Accueil</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item routerLink="/courant" routerLinkActive="selected" routerDirection="root">
+              <ion-icon name="wallet-outline" slot="start"></ion-icon>
+              <ion-label>Courant</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item routerLink="/epargne" routerLinkActive="selected" routerDirection="root">
+              <ion-icon name="save-outline" slot="start"></ion-icon>
+              <ion-label>Épargne</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item routerLink="/deblock" routerLinkActive="selected" routerDirection="root">
+              <ion-icon name="lock-open-outline" slot="start"></ion-icon>
+              <ion-label>Deblock</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
 
-      <div class="menu-divider"></div>
+        <div class="menu-divider"></div>
 
-      <ion-list lines="none">
-        <ion-menu-toggle auto-hide="false">
-          <ion-item routerLink="/courses" routerLinkActive="selected" routerDirection="root">
-            <ion-icon name="basket-outline" slot="start"></ion-icon>
-            <ion-label>Liste de courses</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-      </ion-list>
+        <ion-list lines="none">
+          <ion-menu-toggle auto-hide="false">
+            <ion-item routerLink="/courses" routerLinkActive="selected" routerDirection="root">
+              <ion-icon name="basket-outline" slot="start"></ion-icon>
+              <ion-label>Liste de courses</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
 
-      <div class="menu-divider"></div>
+        <div class="menu-divider"></div>
 
-      <ion-list lines="none">
-        <ion-menu-toggle auto-hide="false">
-          <ion-item routerLink="/parametres" routerLinkActive="selected" routerDirection="root">
-            <ion-icon name="settings-outline" slot="start"></ion-icon>
-            <ion-label>Paramètres</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-        <ion-menu-toggle auto-hide="false">
-          <ion-item button (click)="logout()" detail="false">
-            <ion-icon name="log-out-outline" slot="start" color="danger"></ion-icon>
-            <ion-label color="danger">Déconnexion</ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-      </ion-list>
-    </ion-content>
-  </ion-menu>
+        <ion-list lines="none">
+          <ion-menu-toggle auto-hide="false">
+            <ion-item routerLink="/parametres" routerLinkActive="selected" routerDirection="root">
+              <ion-icon name="settings-outline" slot="start"></ion-icon>
+              <ion-label>Paramètres</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item button (click)="logout()" detail="false">
+              <ion-icon name="log-out-outline" slot="start" color="danger"></ion-icon>
+              <ion-label color="danger">Déconnexion</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
 
-  <ion-router-outlet id="main-content"></ion-router-outlet>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
+
+  <ng-template #noMenu>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ng-template>
 </ion-app>
