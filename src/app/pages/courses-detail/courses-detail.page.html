@@ -25,13 +25,13 @@
       </ion-card-header>
       <ion-card-content>
         <ion-item>
-          <ion-label position="floating">Prix unitaire (€) *</ion-label>
-          <ion-input type="number" [(ngModel)]="prix" (keyup.enter)="addArticle()"></ion-input>
+          <ion-label position="floating">Intitulé</ion-label>
+          <ion-input [(ngModel)]="intitule" placeholder="Non renseigné" (keyup.enter)="addArticle()"></ion-input>
         </ion-item>
 
         <ion-item>
-          <ion-label position="floating">Intitulé</ion-label>
-          <ion-input [(ngModel)]="intitule" placeholder="Non renseigné" (keyup.enter)="addArticle()"></ion-input>
+          <ion-label position="floating">Prix unitaire (€) *</ion-label>
+          <ion-input type="number" [(ngModel)]="prix" (keyup.enter)="addArticle()"></ion-input>
         </ion-item>
 
         <ion-item>
