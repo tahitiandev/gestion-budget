@@ -1,3 +1,31 @@
 ion-chip {
   margin-bottom: 12px;
 }
+
+.articles-list {
+  background: transparent;
+
+  .article-item {
+    --background: var(--ion-card-background, #fff);
+    --border-radius: 10px;
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    margin-bottom: 4px;
+  }
+}
+
+.total-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--ion-color-primary);
+  color: #fff;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-top: 8px;
+  font-weight: 600;
+
+  .total-value {
+    font-size: 1.1rem;
+  }
+}

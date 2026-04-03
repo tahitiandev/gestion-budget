@@ -9,6 +9,26 @@ ion-item.selected {
   margin: 8px 16px;
 }
 
+// Menu items hover/active styling
+ion-menu {
+  ion-item {
+    --border-radius: 10px;
+    margin: 2px 8px;
+    --padding-start: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    ion-icon {
+      font-size: 20px;
+      margin-right: 8px;
+    }
+  }
+
+  ion-item.selected {
+    --background: rgba(var(--ion-color-primary-rgb), 0.1);
+  }
+}
+
 // Desktop: sidebar permanent styling
 ion-split-pane {
   --side-width: 270px;

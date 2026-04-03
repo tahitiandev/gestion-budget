@@ -36,6 +36,225 @@
 @import "@ionic/angular/css/palettes/dark.class.css";
 /* @import "@ionic/angular/css/palettes/dark.system.css"; */
 
+/* ===== Shared Mobile Styles ===== */
+
+// Styled cards
+.app-card {
+  border-radius: var(--app-card-radius, 14px);
+  box-shadow: var(--app-card-shadow, 0 2px 12px rgba(0, 0, 0, 0.08));
+  margin: 0 0 14px;
+}
+
+// Gradient header banner
+.gradient-banner {
+  border-radius: var(--app-card-radius, 14px);
+  padding: 20px;
+  margin: 0 0 14px;
+  color: #fff;
+
+  &.primary { background: var(--app-gradient-primary); }
+  &.success { background: var(--app-gradient-success); }
+  &.danger { background: var(--app-gradient-danger); }
+  &.warning { background: var(--app-gradient-warning); }
+
+  .banner-label {
+    display: block;
+    font-size: 0.82rem;
+    opacity: 0.85;
+    margin-bottom: 4px;
+  }
+
+  .banner-montant {
+    display: block;
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  .banner-icon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    ion-icon {
+      font-size: 28px;
+      opacity: 0.85;
+    }
+  }
+}
+
+// Transaction item with circle icon
+.tx-item {
+  --padding-start: 12px;
+
+  .tx-circle {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-right: 12px;
+
+    ion-icon {
+      font-size: 17px;
+      color: #fff;
+    }
+
+    &.tx-red { background: var(--ion-color-danger); }
+    &.tx-green { background: var(--ion-color-success); }
+    &.tx-blue { background: var(--ion-color-primary); }
+    &.tx-orange { background: var(--ion-color-warning); }
+  }
+}
+
+// Section title
+.section-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ion-text-color);
+  padding: 12px 4px 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  ion-icon {
+    font-size: 18px;
+    color: var(--ion-color-primary);
+  }
+}
+
+// Mini solde cards row
+.solde-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.mini-solde-card {
+  border-radius: 12px;
+  padding: 14px 12px;
+  box-shadow: var(--app-card-shadow);
+  background: var(--ion-card-background, #fff);
+  text-decoration: none;
+  display: block;
+
+  .mini-solde-icon {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+
+  .mini-solde-label {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--ion-color-medium);
+    margin-bottom: 2px;
+  }
+
+  .mini-solde-value {
+    display: block;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--ion-text-color);
+  }
+}
+
+// Form card
+.form-card {
+  border-radius: var(--app-card-radius);
+  box-shadow: var(--app-card-shadow);
+  margin: 0 0 14px;
+
+  ion-card-header {
+    padding-bottom: 4px;
+  }
+
+  ion-card-title {
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    ion-icon {
+      font-size: 20px;
+    }
+  }
+}
+
+// Auth page styling
+.auth-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 40px;
+
+  .auth-logo {
+    font-size: 56px;
+    color: var(--ion-color-primary);
+    margin-bottom: 8px;
+  }
+
+  .auth-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .auth-subtitle {
+    font-size: 0.85rem;
+    color: var(--ion-color-medium);
+    margin-bottom: 28px;
+  }
+
+  .auth-form {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+// Empty state
+.empty-state {
+  text-align: center;
+  padding: 32px 16px;
+
+  ion-icon {
+    font-size: 52px;
+    color: var(--ion-color-medium);
+    opacity: 0.5;
+    margin-bottom: 12px;
+  }
+
+  p {
+    color: var(--ion-color-medium);
+    margin: 0;
+  }
+
+  small {
+    color: var(--ion-color-medium);
+    opacity: 0.7;
+  }
+}
+
+// Settings card styling
+.settings-card {
+  border-radius: var(--app-card-radius);
+  box-shadow: var(--app-card-shadow);
+  margin: 0 0 14px;
+
+  ion-card-title {
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    ion-icon {
+      font-size: 20px;
+    }
+  }
+}
+
 /* ===== Responsive / Desktop Adaptation ===== */
 
 // Contenu principal centré avec max-width sur desktop
@@ -104,7 +323,7 @@
     gap: 12px;
     align-items: start;
 
-    > ion-card {
+    > ion-card, > .settings-card {
       margin: 0 0 12px;
     }
   }

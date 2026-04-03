@@ -9,48 +9,50 @@
 
 <ion-content class="ion-padding">
   <div class="desktop-container">
-  <ion-button expand="full" (click)="createNewList()">
-    <ion-icon name="add-circle-outline" slot="start"></ion-icon>
-    Nouvelle liste de courses
-  </ion-button>
+    <ion-button expand="full" shape="round" (click)="createNewList()">
+      <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+      Nouvelle liste de courses
+    </ion-button>
 
-  <ion-list *ngIf="courseLists.length > 0">
-    <ion-list-header>
-      <ion-label>Historique</ion-label>
-    </ion-list-header>
+    <div *ngIf="courseLists.length > 0">
+      <div class="section-title">
+        <ion-icon name="time-outline"></ion-icon>
+        Historique
+      </div>
 
-    <ion-item-sliding *ngFor="let list of courseLists">
-      <ion-item button (click)="openList(list.id)">
-        <ion-icon
-          [name]="list.validated ? 'checkmark-circle' : 'ellipsis-horizontal-circle'"
-          [color]="list.validated ? (list.selfPaid ? 'success' : 'tertiary') : 'warning'"
-          slot="start">
-        </ion-icon>
-        <ion-label>
-          <h2>{{ list.date | date:'shortDate' }}</h2>
-          <p>
-            {{ list.articles.length }} article{{ list.articles.length > 1 ? 's' : '' }}
-            <span *ngIf="list.validated && !list.selfPaid"> — non payé par moi</span>
-          </p>
-        </ion-label>
-        <ion-note slot="end" [color]="list.validated && list.selfPaid ? 'danger' : 'medium'">
-          {{ list.total | currency:'XPF':'XPF ':'1.0-0' }}
-        </ion-note>
-      </ion-item>
-      <ion-item-options side="end">
-        <ion-item-option color="danger" (click)="deleteList(list.id)">
-          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
-  </ion-list>
+      <ion-list lines="none" class="courses-list">
+        <ion-item-sliding *ngFor="let list of courseLists">
+          <ion-item button (click)="openList(list.id)" class="course-item">
+            <div class="tx-circle" slot="start"
+              [class.tx-green]="list.validated && list.selfPaid"
+              [class.tx-blue]="list.validated && !list.selfPaid"
+              [class.tx-orange]="!list.validated">
+              <ion-icon [name]="list.validated ? 'checkmark-outline' : 'time-outline'"></ion-icon>
+            </div>
+            <ion-label>
+              <h2>{{ list.date | date:'dd/MM/yyyy' }}</h2>
+              <p>
+                {{ list.articles.length }} article{{ list.articles.length > 1 ? 's' : '' }}
+                <span *ngIf="list.validated && !list.selfPaid"> — non payé par moi</span>
+              </p>
+            </ion-label>
+            <ion-note slot="end" [color]="list.validated && list.selfPaid ? 'danger' : 'medium'" style="font-weight: 600;">
+              {{ list.total | currency:'XPF':'':'1.0-0' }}
+            </ion-note>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="deleteList(list.id)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+    </div>
 
-  <ion-card *ngIf="courseLists.length === 0">
-    <ion-card-content class="ion-text-center">
-      <ion-icon name="basket-outline" style="font-size: 48px; color: var(--ion-color-medium);"></ion-icon>
+    <div class="empty-state" *ngIf="courseLists.length === 0">
+      <ion-icon name="basket-outline"></ion-icon>
       <p>Aucune liste de courses</p>
-      <p><small>Créez votre première liste avec le bouton ci-dessus</small></p>
-    </ion-card-content>
-  </ion-card>
+      <small>Créez votre première liste avec le bouton ci-dessus</small>
+    </div>
   </div>
 </ion-content>

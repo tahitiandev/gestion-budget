@@ -1,35 +1,94 @@
-// ===== Mobile: identique à avant =====
+// ===== Mobile =====
 .mobile-only {
   display: block;
-
-  ion-card-title {
-    font-size: 1.2rem;
-  }
-
-  h2 {
-    margin: 0;
-  }
 }
 
-// ===== Desktop: masqué sur mobile =====
 .desktop-only {
   display: none;
 }
 
-// ===== Breakpoint desktop =====
 @media (min-width: 992px) {
-  .mobile-only {
-    display: none;
+  .mobile-only { display: none; }
+  .desktop-only { display: block; }
+}
+
+// ===== Mobile: Month summary card =====
+.month-summary {
+  padding: 16px;
+  background: var(--ion-card-background, #fff);
+}
+
+.month-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.month-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3px;
+}
+
+.month-label {
+  font-size: 0.82rem;
+  color: var(--ion-color-medium);
+}
+
+.month-value {
+  font-size: 0.85rem;
+  font-weight: 600;
+  &.green { color: var(--ion-color-success); }
+  &.red { color: var(--ion-color-danger); }
+}
+
+.month-bar {
+  height: 6px;
+  background: var(--ion-color-light, #f0f0f0);
+  border-radius: 3px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.month-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+  &.green { background: var(--ion-color-success); }
+  &.red { background: var(--ion-color-danger); }
+}
+
+// Mobile transaction list
+.tx-list {
+  background: transparent;
+
+  ion-item-sliding {
+    margin-bottom: 2px;
   }
 
-  .desktop-only {
-    display: block;
+  ion-item {
+    --background: var(--ion-card-background, #fff);
+    --border-radius: 10px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    margin-bottom: 4px;
+
+    h3 {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    p {
+      font-size: 0.78rem;
+    }
   }
 }
 
-// ===== Desktop Dashboard Styles =====
-
-// Patrimoine total
+// ===== Desktop Dashboard (unchanged from before) =====
 .patrimoine-card {
   background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-primary-shade));
   border-radius: 16px;
@@ -42,28 +101,12 @@
     align-items: center;
     gap: 20px;
 
-    ion-icon {
-      font-size: 40px;
-      opacity: 0.85;
-    }
-
-    .patrimoine-label {
-      display: block;
-      font-size: 0.9rem;
-      opacity: 0.85;
-      margin-bottom: 4px;
-    }
-
-    .patrimoine-montant {
-      display: block;
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
+    ion-icon { font-size: 40px; opacity: 0.85; }
+    .patrimoine-label { display: block; font-size: 0.9rem; opacity: 0.85; margin-bottom: 4px; }
+    .patrimoine-montant { display: block; font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
   }
 }
 
-// 3 cartes de solde
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -76,33 +119,18 @@
   border-radius: 12px;
 
   .solde-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-
-    ion-icon {
-      font-size: 22px;
-    }
-
-    span {
-      font-size: 0.95rem;
-      font-weight: 500;
-      opacity: 0.8;
-    }
+    display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+    ion-icon { font-size: 22px; }
+    span { font-size: 0.95rem; font-weight: 500; opacity: 0.8; }
   }
 
-  .solde-montant {
-    font-size: 1.5rem;
-    font-weight: 700;
-  }
+  .solde-montant { font-size: 1.5rem; font-weight: 700; }
 }
 
 .solde-courant .solde-header ion-icon { color: var(--ion-color-primary); }
 .solde-epargne .solde-header ion-icon { color: var(--ion-color-success); }
 .solde-deblock .solde-header ion-icon { color: var(--ion-color-warning); }
 
-// Dashboard row (2 colonnes)
 .dashboard-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -115,148 +143,46 @@
   border-radius: 12px;
 
   ion-card-title {
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    ion-icon {
-      font-size: 20px;
-      color: var(--ion-color-primary);
-    }
+    font-size: 1.1rem; display: flex; align-items: center; gap: 8px;
+    ion-icon { font-size: 20px; color: var(--ion-color-primary); }
   }
 
-  ion-card-subtitle {
-    font-size: 0.85rem;
-    margin-top: 4px;
-  }
+  ion-card-subtitle { font-size: 0.85rem; margin-top: 4px; }
 }
 
-// Résumé du mois
-.resume-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4px;
-}
-
+.resume-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .resume-label {
-  font-size: 0.9rem;
-  color: var(--ion-text-color);
-  opacity: 0.7;
-
-  &.bold {
-    opacity: 1;
-    font-weight: 600;
-    font-size: 0.95rem;
-  }
+  font-size: 0.9rem; color: var(--ion-text-color); opacity: 0.7;
+  &.bold { opacity: 1; font-weight: 600; font-size: 0.95rem; }
 }
-
 .resume-value {
-  font-size: 0.95rem;
-  font-weight: 600;
-
+  font-size: 0.95rem; font-weight: 600;
   &.success { color: var(--ion-color-success); }
   &.danger { color: var(--ion-color-danger); }
   &.bold { font-size: 1.05rem; }
 }
-
-.resume-bar {
-  height: 8px;
-  background: var(--ion-color-light, #f0f0f0);
-  border-radius: 4px;
-  margin-bottom: 12px;
-  overflow: hidden;
-}
-
+.resume-bar { height: 8px; background: var(--ion-color-light, #f0f0f0); border-radius: 4px; margin-bottom: 12px; overflow: hidden; }
 .resume-bar-fill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 0.6s ease;
-
+  height: 100%; border-radius: 4px; transition: width 0.6s ease;
   &.success { background: var(--ion-color-success); }
   &.danger { background: var(--ion-color-danger); }
 }
-
-.resume-divider {
-  height: 1px;
-  background: var(--ion-color-light-shade, #d7d8da);
-  margin: 12px 0;
-}
-
-// Charts
-.chart-container {
-  position: relative;
-  height: 220px;
-  margin-top: 20px;
-}
-
-.chart-doughnut {
-  height: 200px;
-  margin-top: 8px;
-}
-
-// Category legend
-.category-legend {
-  margin-top: 16px;
-}
-
+.resume-divider { height: 1px; background: var(--ion-color-light-shade, #d7d8da); margin: 12px 0; }
+.chart-container { position: relative; height: 220px; margin-top: 20px; }
+.chart-doughnut { height: 200px; margin-top: 8px; }
+.category-legend { margin-top: 16px; }
 .legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 0;
+  display: flex; align-items: center; gap: 8px; padding: 6px 0;
   border-bottom: 1px solid var(--ion-color-light, #f0f0f0);
-
-  &:last-child {
-    border-bottom: none;
-  }
+  &:last-child { border-bottom: none; }
 }
-
-.legend-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.legend-label {
-  flex: 1;
-  font-size: 0.85rem;
-}
-
-.legend-value {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--ion-color-danger);
-}
-
-// Transactions card
-.transactions-card {
-  ion-card-content.no-padding {
-    padding: 0;
-  }
-}
-
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.legend-label { flex: 1; font-size: 0.85rem; }
+.legend-value { font-size: 0.85rem; font-weight: 600; color: var(--ion-color-danger); }
+.transactions-card ion-card-content.no-padding { padding: 0; }
 .tx-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-
-  ion-icon {
-    font-size: 18px;
-    color: #fff;
-  }
-
-  &.tx-depense {
-    background: var(--ion-color-danger);
-  }
-
-  &.tx-apport {
-    background: var(--ion-color-success);
-  }
+  width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  ion-icon { font-size: 18px; color: #fff; }
+  &.tx-depense { background: var(--ion-color-danger); }
+  &.tx-apport { background: var(--ion-color-success); }
 }

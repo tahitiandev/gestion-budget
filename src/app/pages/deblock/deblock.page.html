@@ -10,19 +10,25 @@
 
 <ion-content class="ion-padding">
   <div class="desktop-container">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Solde Deblock</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <h2>{{ soldeDeblock | currency:'XPF':'XPF ':'1.0-0' }}</h2>
-      </ion-card-content>
-    </ion-card>
+    <!-- Solde banner -->
+    <div class="gradient-banner warning">
+      <div class="banner-icon">
+        <ion-icon name="lock-open-outline"></ion-icon>
+        <div>
+          <span class="banner-label">Solde Deblock</span>
+          <span class="banner-montant">{{ soldeDeblock | currency:'XPF':'XPF ':'1.0-0' }}</span>
+        </div>
+      </div>
+    </div>
 
     <div class="desktop-two-col">
-      <ion-card>
+      <!-- Formulaire -->
+      <ion-card class="form-card">
         <ion-card-header>
-          <ion-card-title>Nouvelle opération</ion-card-title>
+          <ion-card-title>
+            <ion-icon name="add-circle-outline" color="warning"></ion-icon>
+            Nouvelle opération
+          </ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <ion-item>
@@ -57,40 +63,50 @@
             <ion-input [(ngModel)]="commentaire"></ion-input>
           </ion-item>
 
-          <ion-button expand="full" class="ion-margin-top" (click)="addOperation()" [disabled]="!montantSaisi || montantSaisi <= 0">
+          <ion-button expand="full" color="warning" class="ion-margin-top" (click)="addOperation()" [disabled]="!montantSaisi || montantSaisi <= 0">
             Enregistrer
           </ion-button>
         </ion-card-content>
       </ion-card>
 
-      <ion-list>
-    <ion-list-header>
-      <ion-label>Historique Deblock</ion-label>
-    </ion-list-header>
+      <!-- Historique -->
+      <div>
+        <div class="section-title">
+          <ion-icon name="time-outline"></ion-icon>
+          Historique Deblock
+        </div>
 
-    <ion-item-sliding *ngFor="let t of operations">
-      <ion-item>
-        <ion-label>
-          <h3>{{ getOperationLabel(t) }}</h3>
-          <p>{{ t.date | date:'shortDate' }} - {{ t.commentaire }}</p>
-        </ion-label>
-        <ion-note slot="end" [color]="getOperationColor(t)" (click)="editMontant(t)" style="cursor: pointer;">
-          {{ getOperationSign(t) }}{{ t.montant | currency:'XPF':'XPF ':'1.0-0' }}
-        </ion-note>
-      </ion-item>
-      <ion-item-options side="end">
-        <ion-item-option color="danger" (click)="deleteOperation(t.id)">
-          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
+        <ion-list lines="none" class="tx-list-styled">
+          <ion-item-sliding *ngFor="let t of operations">
+            <ion-item class="tx-item">
+              <div class="tx-circle" slot="start"
+                [class.tx-red]="getOperationColor(t) === 'danger'"
+                [class.tx-green]="getOperationColor(t) === 'success'"
+                [class.tx-orange]="getOperationColor(t) === 'warning'"
+                [class.tx-blue]="getOperationColor(t) === 'primary'">
+                <ion-icon [name]="getOperationColor(t) === 'danger' ? 'arrow-down-outline' : 'arrow-up-outline'"></ion-icon>
+              </div>
+              <ion-label>
+                <h3>{{ getOperationLabel(t) }}</h3>
+                <p>{{ t.date | date:'dd/MM/yyyy' }} - {{ t.commentaire }}</p>
+              </ion-label>
+              <ion-note slot="end" [color]="getOperationColor(t)" (click)="editMontant(t)" style="cursor: pointer; font-weight: 600;">
+                {{ getOperationSign(t) }}{{ t.montant | currency:'XPF':'':'1.0-0' }}
+              </ion-note>
+            </ion-item>
+            <ion-item-options side="end">
+              <ion-item-option color="danger" (click)="deleteOperation(t.id)">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        </ion-list>
 
-    <ion-item *ngIf="operations.length === 0">
-      <ion-label class="ion-text-center">
-        <p>Aucune opération</p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+        <div class="empty-state" *ngIf="operations.length === 0">
+          <ion-icon name="lock-open-outline"></ion-icon>
+          <p>Aucune opération</p>
+        </div>
+      </div>
     </div>
   </div>
 </ion-content>

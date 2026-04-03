@@ -6,26 +6,34 @@
 
 <ion-content class="ion-padding">
   <div class="auth-container">
-    <ion-item>
-      <ion-label position="floating">Email</ion-label>
-      <ion-input type="email" [(ngModel)]="email"></ion-input>
-    </ion-item>
+    <div class="auth-page">
+      <ion-icon name="wallet-outline" class="auth-logo"></ion-icon>
+      <div class="auth-title">Mon Budget</div>
+      <div class="auth-subtitle">Connectez-vous pour continuer</div>
 
-    <ion-item>
-      <ion-label position="floating">Mot de passe</ion-label>
-      <ion-input type="password" [(ngModel)]="password"></ion-input>
-    </ion-item>
+      <div class="auth-form">
+        <ion-item>
+          <ion-label position="floating">Email</ion-label>
+          <ion-input type="email" [(ngModel)]="email"></ion-input>
+        </ion-item>
 
-    <ion-text color="danger" *ngIf="errorMessage">
-      <p class="ion-padding-start">{{ errorMessage }}</p>
-    </ion-text>
+        <ion-item>
+          <ion-label position="floating">Mot de passe</ion-label>
+          <ion-input type="password" [(ngModel)]="password"></ion-input>
+        </ion-item>
 
-    <ion-button expand="full" class="ion-margin-top" (click)="login()">
-      Se connecter
-    </ion-button>
+        <ion-text color="danger" *ngIf="errorMessage">
+          <p class="ion-padding-start">{{ errorMessage }}</p>
+        </ion-text>
 
-    <ion-button expand="full" fill="clear" routerLink="/register">
-      Pas encore de compte ? S'inscrire
-    </ion-button>
+        <ion-button expand="full" class="ion-margin-top" (click)="login()">
+          Se connecter
+        </ion-button>
+
+        <ion-button expand="full" fill="clear" routerLink="/register">
+          Pas encore de compte ? S'inscrire
+        </ion-button>
+      </div>
+    </div>
   </div>
 </ion-content>

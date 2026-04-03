@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 export interface ArticleCourse {
   intitule: string;
   prix: number;
+  quantite: number;
 }
 
 export interface CourseList {
@@ -139,7 +140,7 @@ export class CoursesService {
   }
 
   async updateCourseList(updated: CourseList) {
-    updated.total = updated.articles.reduce((sum, a) => sum + a.prix, 0);
+    updated.total = updated.articles.reduce((sum, a) => sum + a.prix * (a.quantite ?? 1), 0);
 
     const all = await this.getLocal();
     const index = all.findIndex(l => l.id === updated.id);
@@ -158,7 +159,11 @@ export class CoursesService {
     const list = await this.getCourseList(id);
     if (!list || list.articles.length === 0) return;
 
-    const detail = list.articles.map(a => `${a.intitule} (${a.prix.toFixed(0)}€)`).join(', ');
+    const detail = list.articles.map(a => {
+      const qte = a.quantite ?? 1;
+      const lineTotal = a.prix * qte;
+      return qte > 1 ? `${a.intitule} x${qte} (${lineTotal.toFixed(0)}€)` : `${a.intitule} (${lineTotal.toFixed(0)}€)`;
+    }).join(', ');
 
     if (list.validated && list.transactionId) {
       // Mise à jour de la transaction existante
@@ -207,7 +212,7 @@ export class CoursesService {
 
     list.validated = true;
     list.selfPaid = false;
-    list.total = list.articles.reduce((sum, a) => sum + a.prix, 0);
+    list.total = list.articles.reduce((sum, a) => sum + a.prix * (a.quantite ?? 1), 0);
 
     const all = await this.getLocal();
     const index = all.findIndex(l => l.id === id);
@@ -221,7 +226,11 @@ export class CoursesService {
   private async updateLinkedTransaction(list: CourseList) {
     if (!list.transactionId) return;
 
-    const detail = list.articles.map(a => `${a.intitule} (${a.prix.toFixed(0)}€)`).join(', ');
+    const detail = list.articles.map(a => {
+      const qte = a.quantite ?? 1;
+      const lineTotal = a.prix * qte;
+      return qte > 1 ? `${a.intitule} x${qte} (${lineTotal.toFixed(0)}€)` : `${a.intitule} (${lineTotal.toFixed(0)}€)`;
+    }).join(', ');
 
     // Supprimer l'ancienne transaction et en créer une nouvelle avec le même commentaire
     await this.budgetService.deleteTransaction(list.transactionId);

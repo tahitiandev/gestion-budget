@@ -9,10 +9,14 @@
 
 <ion-content class="ion-padding">
   <div class="desktop-container settings-grid">
+
   <!-- Apparence -->
-  <ion-card>
+  <ion-card class="settings-card">
     <ion-card-header>
-      <ion-card-title>Apparence</ion-card-title>
+      <ion-card-title>
+        <ion-icon name="color-palette-outline" color="primary"></ion-icon>
+        Apparence
+      </ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-item>
@@ -24,9 +28,12 @@
   </ion-card>
 
   <!-- Opération par défaut -->
-  <ion-card>
+  <ion-card class="settings-card">
     <ion-card-header>
-      <ion-card-title>Opération par défaut</ion-card-title>
+      <ion-card-title>
+        <ion-icon name="options-outline" color="primary"></ion-icon>
+        Opération par défaut
+      </ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-item>
@@ -54,9 +61,12 @@
   </ion-card>
 
   <!-- Charges fixes -->
-  <ion-card>
+  <ion-card class="settings-card">
     <ion-card-header>
-      <ion-card-title>Charges fixes</ion-card-title>
+      <ion-card-title>
+        <ion-icon name="wallet-outline" color="warning"></ion-icon>
+        Charges fixes
+      </ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-list *ngIf="fixedCharges.length > 0">
@@ -95,9 +105,12 @@
   </ion-card>
 
   <!-- Ressources fixes -->
-  <ion-card>
+  <ion-card class="settings-card">
     <ion-card-header>
-      <ion-card-title>Ressources fixes</ion-card-title>
+      <ion-card-title>
+        <ion-icon name="cash-outline" color="success"></ion-icon>
+        Ressources fixes
+      </ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-list *ngIf="fixedResources.length > 0">
@@ -136,9 +149,12 @@
   </ion-card>
 
   <!-- Catégories de dépenses -->
-  <ion-card>
+  <ion-card class="settings-card">
     <ion-card-header>
-      <ion-card-title>Catégories de dépenses</ion-card-title>
+      <ion-card-title>
+        <ion-icon name="pricetag-outline" color="danger"></ion-icon>
+        Catégories de dépenses
+      </ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-list>
@@ -169,9 +185,12 @@
   </ion-card>
 
   <!-- Catégories d'apports -->
-  <ion-card>
+  <ion-card class="settings-card">
     <ion-card-header>
-      <ion-card-title>Catégories d'apports</ion-card-title>
+      <ion-card-title>
+        <ion-icon name="pricetag-outline" color="success"></ion-icon>
+        Catégories d'apports
+      </ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-list>
@@ -200,5 +219,6 @@
       </ion-button>
     </ion-card-content>
   </ion-card>
+
   </div>
 </ion-content>

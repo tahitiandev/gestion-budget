@@ -1,0 +1,14 @@
+.courses-list {
+  background: transparent;
+
+  .course-item {
+    --background: var(--ion-card-background, #fff);
+    --border-radius: 10px;
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    margin-bottom: 6px;
+
+    h2 { font-weight: 600; font-size: 0.95rem; }
+    p { font-size: 0.78rem; }
+  }
+}

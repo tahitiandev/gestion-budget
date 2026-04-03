@@ -1,2 +1,14 @@
-// For information on how to create your own theme, please see:
-// http://ionicframework.com/docs/theming/
+// Custom theme for Budget App
+:root {
+  --app-gradient-primary: linear-gradient(135deg, #3880ff 0%, #5260ff 100%);
+  --app-gradient-success: linear-gradient(135deg, #2dd36f 0%, #17b85c 100%);
+  --app-gradient-danger: linear-gradient(135deg, #eb445a 0%, #cf3c4f 100%);
+  --app-gradient-warning: linear-gradient(135deg, #ffc409 0%, #e0ac08 100%);
+
+  --app-card-radius: 14px;
+  --app-card-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.ion-palette-dark {
+  --app-card-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
