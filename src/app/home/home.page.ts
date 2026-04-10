@@ -65,7 +65,7 @@ export class HomePage implements OnInit, AfterViewInit {
     this.loading = true;
     await this.budgetService.syncDone;
     this.transactions = (await this.budgetService.getTransactions())
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      .sort((a, b) => b.date.localeCompare(a.date));
     this.recentTransactions = this.transactions.slice(0, 10);
     this.calculerSoldes();
     this.calculerResumeMois();

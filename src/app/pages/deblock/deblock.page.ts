@@ -16,6 +16,7 @@ export class DeblockPage {
   soldeDeblock = 0;
   allOperations: Transaction[] = [];
   operations: Transaction[] = [];
+  loading = true;
 
   operationType: OperationType = 'courant-deblock';
   montantSaisi: number = 0;
@@ -32,7 +33,12 @@ export class DeblockPage {
   }
 
   async ionViewWillEnter() {
+    this.loading = true;
+  }
+
+  async ionViewDidEnter() {
     await this.loadData();
+    this.loading = false;
   }
 
   async loadData() {
@@ -57,7 +63,7 @@ export class DeblockPage {
         (t.type === 'virement' && ['deblock+', 'deblock-courant', 'deblock-epargne', 'deblock-depense'].includes(t.categorie)) ||
         (t.type === 'apport' && t.categorie === 'deblock-apport')
       )
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      .sort((a, b) => b.date.localeCompare(a.date));
     this.operations = this.allOperations.slice(0, this.PAGE_SIZE);
   }
 

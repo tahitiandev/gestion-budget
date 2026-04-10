@@ -16,6 +16,7 @@ export class EpargnePage {
   soldeEpargne = 0;
   allOperations: Transaction[] = [];
   operations: Transaction[] = [];
+  loading = true;
 
   operationType: OperationType = 'courant-epargne';
   montant: number = 0;
@@ -28,7 +29,12 @@ export class EpargnePage {
   }
 
   async ionViewWillEnter() {
+    this.loading = true;
+  }
+
+  async ionViewDidEnter() {
     await this.loadData();
+    this.loading = false;
   }
 
   async loadData() {
@@ -53,7 +59,7 @@ export class EpargnePage {
         (t.type === 'virement' && (t.categorie === 'epargne+' || t.categorie === 'epargne-')) ||
         (t.type === 'apport' && t.categorie === 'epargne-apport')
       )
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      .sort((a, b) => b.date.localeCompare(a.date));
     this.operations = this.allOperations.slice(0, this.PAGE_SIZE);
   }
 

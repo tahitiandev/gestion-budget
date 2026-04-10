@@ -15,6 +15,7 @@ export class CourantPage {
   soldeCourant = 0;
   allOperations: Transaction[] = [];
   operations: Transaction[] = [];
+  loading = true;
 
   operationType: 'apport' | 'depense' = 'apport';
   categorie = '';
@@ -25,6 +26,9 @@ export class CourantPage {
   categoriesDepense: string[] = [];
   fixedCharges: FixedCharge[] = [];
   fixedResources: FixedCharge[] = [];
+
+  // Cached categories list — rebuilt only on type change
+  categoriesList: { value: string; label: string }[] = [];
 
   get isFixedCharges(): boolean {
     return this.categorie === '__charges_fixes__';
@@ -57,6 +61,10 @@ export class CourantPage {
   }
 
   async ionViewWillEnter() {
+    this.loading = true;
+  }
+
+  async ionViewDidEnter() {
     const [cats, fixedCharges, fixedResources] = await Promise.all([
       this.categoriesService.getCategories(),
       this.categoriesService.getFixedCharges(),
@@ -66,10 +74,12 @@ export class CourantPage {
     this.categoriesDepense = cats.depense;
     this.fixedCharges = fixedCharges;
     this.fixedResources = fixedResources;
+    this.buildCategoriesList();
     await this.loadData();
+    this.loading = false;
   }
 
-  get categories(): { value: string; label: string }[] {
+  buildCategoriesList() {
     if (this.operationType === 'apport') {
       const cats = this.categoriesApport.map(c => ({
         value: c,
@@ -78,16 +88,17 @@ export class CourantPage {
       if (this.fixedResources.length > 0) {
         cats.unshift({ value: '__ressources_fixes__', label: 'Ajouter les ressources fixes' });
       }
-      return cats;
+      this.categoriesList = cats;
+    } else {
+      const cats = this.categoriesDepense.map(c => ({
+        value: c,
+        label: this.TRANSFER_LABELS[c] || c
+      }));
+      if (this.fixedCharges.length > 0) {
+        cats.unshift({ value: '__charges_fixes__', label: 'Ajouter les charges fixes' });
+      }
+      this.categoriesList = cats;
     }
-    const cats = this.categoriesDepense.map(c => ({
-      value: c,
-      label: this.TRANSFER_LABELS[c] || c
-    }));
-    if (this.fixedCharges.length > 0) {
-      cats.unshift({ value: '__charges_fixes__', label: 'Ajouter les charges fixes' });
-    }
-    return cats;
   }
 
   private isTransfert(categorie: string): boolean {
@@ -96,11 +107,14 @@ export class CourantPage {
 
   onTypeChange() {
     this.categorie = '';
+    this.buildCategoriesList();
   }
 
   async loadData() {
     await this.budgetService.syncDone;
     const all = await this.budgetService.getTransactions();
+
+    console.log(`[Courant] Total transactions: ${all.length}`);
 
     let courant = 0;
     for (const t of all) {
@@ -123,7 +137,7 @@ export class CourantPage {
         t.type === 'depense' ||
         (t.type === 'virement' && ['epargne+', 'epargne-', 'deblock+', 'deblock-courant'].includes(t.categorie))
       )
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      .sort((a, b) => b.date.localeCompare(a.date));
     this.operations = this.allOperations.slice(0, this.PAGE_SIZE);
   }
 

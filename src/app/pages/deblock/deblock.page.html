@@ -9,7 +9,11 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="desktop-container">
+  <div *ngIf="loading" class="ion-text-center ion-padding">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Chargement...</p>
+  </div>
+  <div class="desktop-container" *ngIf="!loading">
     <!-- Solde banner -->
     <div class="gradient-banner warning">
       <div class="banner-icon">

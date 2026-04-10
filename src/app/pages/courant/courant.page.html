@@ -9,7 +9,11 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="desktop-container">
+  <div *ngIf="loading" class="ion-text-center ion-padding">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Chargement...</p>
+  </div>
+  <div class="desktop-container" *ngIf="!loading">
     <!-- Solde banner -->
     <div class="gradient-banner primary">
       <div class="banner-icon">
@@ -43,7 +47,7 @@
           <ion-item>
             <ion-label>Catégorie</ion-label>
             <ion-select [(ngModel)]="categorie">
-              <ion-select-option *ngFor="let cat of categories" [value]="cat.value">{{ cat.label }}</ion-select-option>
+              <ion-select-option *ngFor="let cat of categoriesList" [value]="cat.value">{{ cat.label }}</ion-select-option>
             </ion-select>
           </ion-item>
 
