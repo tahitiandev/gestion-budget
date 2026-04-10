@@ -64,7 +64,7 @@
         </div>
 
         <ion-list lines="none" class="tx-list-styled">
-          <ion-item-sliding *ngFor="let t of operations">
+          <ion-item-sliding *ngFor="let t of operations; trackBy: trackById">
             <ion-item class="tx-item">
               <div class="tx-circle" slot="start"
                 [class.tx-red]="getOperationColor(t) === 'danger'"
@@ -87,6 +87,10 @@
             </ion-item-options>
           </ion-item-sliding>
         </ion-list>
+
+        <ion-infinite-scroll (ionInfinite)="loadMore($event)" [disabled]="operations.length >= allOperations.length">
+          <ion-infinite-scroll-content loadingSpinner="crescent"></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
 
         <div class="empty-state" *ngIf="operations.length === 0">
           <ion-icon name="save-outline"></ion-icon>

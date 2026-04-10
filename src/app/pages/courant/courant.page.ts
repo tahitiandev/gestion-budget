@@ -11,7 +11,9 @@ import { CategoriesService, FixedCharge } from '../../services/categories.servic
   standalone: false,
 })
 export class CourantPage {
+  private readonly PAGE_SIZE = 50;
   soldeCourant = 0;
+  allOperations: Transaction[] = [];
   operations: Transaction[] = [];
 
   operationType: 'apport' | 'depense' = 'apport';
@@ -115,13 +117,27 @@ export class CourantPage {
     }
     this.soldeCourant = courant;
 
-    this.operations = all
+    this.allOperations = all
       .filter(t =>
         (t.type === 'apport' && t.categorie !== 'epargne-apport' && t.categorie !== 'deblock-apport') ||
         t.type === 'depense' ||
         (t.type === 'virement' && ['epargne+', 'epargne-', 'deblock+', 'deblock-courant'].includes(t.categorie))
       )
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    this.operations = this.allOperations.slice(0, this.PAGE_SIZE);
+  }
+
+  loadMore(event: any) {
+    const next = this.allOperations.slice(this.operations.length, this.operations.length + this.PAGE_SIZE);
+    this.operations = [...this.operations, ...next];
+    event.target.complete();
+    if (this.operations.length >= this.allOperations.length) {
+      event.target.disabled = true;
+    }
+  }
+
+  trackById(index: number, t: Transaction): string {
+    return t.id;
   }
 
   selectInput(event: any) {

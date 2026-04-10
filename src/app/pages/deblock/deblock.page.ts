@@ -12,7 +12,9 @@ type OperationType = 'courant-deblock' | 'epargne-deblock' | 'apport-deblock' | 
   standalone: false,
 })
 export class DeblockPage {
+  private readonly PAGE_SIZE = 50;
   soldeDeblock = 0;
+  allOperations: Transaction[] = [];
   operations: Transaction[] = [];
 
   operationType: OperationType = 'courant-deblock';
@@ -50,12 +52,26 @@ export class DeblockPage {
     }
     this.soldeDeblock = deblock;
 
-    this.operations = all
+    this.allOperations = all
       .filter(t =>
         (t.type === 'virement' && ['deblock+', 'deblock-courant', 'deblock-epargne', 'deblock-depense'].includes(t.categorie)) ||
         (t.type === 'apport' && t.categorie === 'deblock-apport')
       )
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    this.operations = this.allOperations.slice(0, this.PAGE_SIZE);
+  }
+
+  loadMore(event: any) {
+    const next = this.allOperations.slice(this.operations.length, this.operations.length + this.PAGE_SIZE);
+    this.operations = [...this.operations, ...next];
+    event.target.complete();
+    if (this.operations.length >= this.allOperations.length) {
+      event.target.disabled = true;
+    }
+  }
+
+  trackById(index: number, t: Transaction): string {
+    return t.id;
   }
 
   selectInput(event: any) {

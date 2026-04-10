@@ -12,7 +12,9 @@ type OperationType = 'courant-epargne' | 'epargne-courant' | 'apport-epargne';
   standalone: false,
 })
 export class EpargnePage {
+  private readonly PAGE_SIZE = 50;
   soldeEpargne = 0;
+  allOperations: Transaction[] = [];
   operations: Transaction[] = [];
 
   operationType: OperationType = 'courant-epargne';
@@ -46,12 +48,26 @@ export class EpargnePage {
     this.soldeEpargne = epargne;
 
     // Opérations liées à l'épargne
-    this.operations = all
+    this.allOperations = all
       .filter(t =>
         (t.type === 'virement' && (t.categorie === 'epargne+' || t.categorie === 'epargne-')) ||
         (t.type === 'apport' && t.categorie === 'epargne-apport')
       )
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    this.operations = this.allOperations.slice(0, this.PAGE_SIZE);
+  }
+
+  loadMore(event: any) {
+    const next = this.allOperations.slice(this.operations.length, this.operations.length + this.PAGE_SIZE);
+    this.operations = [...this.operations, ...next];
+    event.target.complete();
+    if (this.operations.length >= this.allOperations.length) {
+      event.target.disabled = true;
+    }
+  }
+
+  trackById(index: number, t: Transaction): string {
+    return t.id;
   }
 
   selectInput(event: any) {
