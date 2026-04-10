@@ -30,6 +30,7 @@ export class EpargnePage {
   }
 
   async loadData() {
+    await this.budgetService.syncDone;
     const all = await this.budgetService.getTransactions();
 
     // Calculer le solde épargne

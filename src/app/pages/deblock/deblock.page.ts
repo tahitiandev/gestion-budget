@@ -34,6 +34,7 @@ export class DeblockPage {
   }
 
   async loadData() {
+    await this.budgetService.syncDone;
     const all = await this.budgetService.getTransactions();
 
     let deblock = 0;

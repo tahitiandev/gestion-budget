@@ -55,11 +55,15 @@ export class CourantPage {
   }
 
   async ionViewWillEnter() {
-    const cats = await this.categoriesService.getCategories();
+    const [cats, fixedCharges, fixedResources] = await Promise.all([
+      this.categoriesService.getCategories(),
+      this.categoriesService.getFixedCharges(),
+      this.categoriesService.getFixedResources()
+    ]);
     this.categoriesApport = cats.apport;
     this.categoriesDepense = cats.depense;
-    this.fixedCharges = await this.categoriesService.getFixedCharges();
-    this.fixedResources = await this.categoriesService.getFixedResources();
+    this.fixedCharges = fixedCharges;
+    this.fixedResources = fixedResources;
     await this.loadData();
   }
 
@@ -93,6 +97,7 @@ export class CourantPage {
   }
 
   async loadData() {
+    await this.budgetService.syncDone;
     const all = await this.budgetService.getTransactions();
 
     let courant = 0;
